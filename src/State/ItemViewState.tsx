@@ -1,4 +1,4 @@
-import { GloomhavenItemSlot, SortDirection, SortProperty } from "./Types";
+import { GloomhavenItemSlot, SoloClassShorthand, SortDirection, SortProperty } from "./Types";
 import { GameType } from "../games";
 import { createSelector } from "reselect";
 import { RootState } from "./Reducer";
@@ -11,6 +11,7 @@ import { GameTypeAction } from "./GameTypeAction";
 export interface ItemViewState {
     slots?: Array<GloomhavenItemSlot>;
     search: string;
+    soloClass?: SoloClassShorthand;
     direction: SortDirection;
     property: SortProperty;
 }
@@ -18,6 +19,7 @@ export interface ItemViewState {
 const initialItemViewState : ItemViewState = {
     slots: undefined,
     search: '',
+    soloClass: undefined,
     direction: SortDirection.ascending,
     property: 'id'
 };
@@ -66,6 +68,12 @@ const itemViewStateSlice = createSlice({
             gameState.slots = action.payload.value;
         } 
     },
+    storeFilterClass(state, action: PayloadAction<GameTypeAction<SoloClassShorthand | undefined>>) {
+        const gameState = state[action.payload.gameType]; 
+        if (gameState) {
+            gameState.soloClass = action.payload.value;
+        } 
+    }
   }
 })
 
@@ -90,6 +98,6 @@ export const itemViewStateSelector = createSelector(
     return useSelector(itemViewStateSelector)(key);
   }
 
-export const { storeFilterSearch, storeSortingDirection, storeFilterSlots, storeSortingProperty, storeItemViewState } = itemViewStateSlice.actions;
+export const { storeFilterClass, storeFilterSearch, storeSortingDirection, storeFilterSlots, storeSortingProperty, storeItemViewState } = itemViewStateSlice.actions;
 
 export default itemViewStateSlice.reducer;

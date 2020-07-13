@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { GloomhavenItem } from "../../../State/Types";
 import { Checkbox } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
 import { storeItemsInUse, getSpoilerFilter } from "../../../State/SpoilerFilter";
 import { useGame } from '../../Game/GameProvider';
+import CustomDropdown from './CustomDropdown';
 
 type Props = {
     item : GloomhavenItem;
@@ -32,16 +33,18 @@ const ItemManagement = (props:Props) => {
         dispatch(storeItemsInUse({value:itemsInUse, gameType}));
     }
 
-
     return (
         <>
             {[...Array(item.count).keys()].map(index =>
-                <Checkbox key={index}
-                        className={'i'+index}
-                        toggle
-                        disabled={lockSpoilerPanel}
-                        checked={!!(itemsInUse[item.id] & Math.pow(2, index))}
-                        onChange={() => toggleItemInUse(item.id, Math.pow(2, index))}/>
+                <Fragment key={"cb" + index}>
+                    <Checkbox key={"cb" + index}
+                            className={'i'+index}
+                            toggle
+                            disabled={lockSpoilerPanel}
+                            checked={!!(itemsInUse[item.id] & Math.pow(2, index))}
+                            onChange={() => toggleItemInUse(item.id, Math.pow(2, index))}/>
+                    <CustomDropdown className={'i' + index} index={index} item={item}/>
+                </Fragment>
             )}
         </>
         );

@@ -9,8 +9,8 @@ const useItems = (): Array<GloomhavenItem> => {
 
     const { isItemShown, initialItems} = useGame();
     const spoilerFilter = getSpoilerFilter();
-    const { all, item: spoilerFilterItem } = spoilerFilter;
-    const { property, direction, slots, search } = getItemViewState();
+    const { all, item: spoilerFilterItem, itemsInUseClasses } = spoilerFilter;
+    const { property, direction, slots, search, soloClass } = getItemViewState();
 
     const getFilteredItems = () => {
         const spoilerFiltered = all ? initialItems : initialItems.filter(item => {
@@ -24,6 +24,16 @@ const useItems = (): Array<GloomhavenItem> => {
             }
             if (search.length > 2 && hit) { 
                 hit = (!!item.name.match(new RegExp(search, 'i')) || !!item.desc.match(new RegExp(search, 'i')));
+            }
+            if (soloClass && hit) {
+                const classes = itemsInUseClasses[item.id];
+                if (classes) {
+                    hit = classes.includes(soloClass);
+                }
+                else {
+                    hit = false;
+                }
+
             }
             return hit;
         });

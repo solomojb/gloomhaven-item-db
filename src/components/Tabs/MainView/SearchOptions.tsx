@@ -6,6 +6,7 @@ import { storeFilterSearch, storeFilterSlots, getItemViewState } from '../../../
 import { getSlotImageSrc } from '../../../helpers';
 import { GloomhavenItemSlot, SortProperty} from '../../../State/Types';
 import { useGame } from '../../Game/GameProvider';
+import PartyDropdown from './PartyDropdown';
 
 type Props = {
     setSorting : (newProperty: SortProperty) => void;
@@ -110,6 +111,10 @@ const SearchOptions = (props:Props) => {
                         icon={{name: 'close', link: true, onClick: () => dispatch(storeFilterSearch({value:'', gameType}))}}
                         placeholder={'Search...'}
                     />
+                </Form.Group>
+                <Form.Group inline>
+                    <label>Class:</label>
+                    <PartyDropdown/>
                 </Form.Group>
             </Form>
         </React.Fragment>

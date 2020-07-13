@@ -12,12 +12,18 @@ export type ItemsInUse = {
     [key:number]: number;
   };
 
+  export type ItemInUseClasses = {
+    [key:number] : Array<SoloClassShorthand>
+  }
+
 
 export interface SpoilerFilter {
     all: boolean
     prosperity: number
     item: Array<number>
     itemsInUse: ItemsInUse;
+    itemsInUseClasses: ItemInUseClasses;
+    classesInUse: Array<SoloClassShorthand>
     soloClass: Array<SoloClassShorthand>
     discount: number
     displayAs: ItemViewDisplayType
@@ -38,6 +44,8 @@ const initialSpoilerFilterState:SpoilerFilter = {
     prosperity: 1,
     item: [],
     itemsInUse: {},
+    itemsInUseClasses: {},
+    classesInUse: [],
     soloClass: [],
     discount: 0,
     displayAs: 'list',
@@ -120,6 +128,18 @@ const initialSpoilerMapState = Object.values(GameType).reduce(
                 gameState.discount = action.payload.value;
             } 
         },
+        storeClassesInUse(state, action:PayloadAction<GameTypeAction<Array<SoloClassShorthand>>>) {
+            const gameState = state[action.payload.gameType]; 
+            if (gameState) {
+                gameState.classesInUse = action.payload.value;
+            } 
+        },
+        storeItemsInUseClasses(state, action:PayloadAction<GameTypeAction<ItemInUseClasses>>) {
+            const gameState = state[action.payload.gameType]; 
+            if (gameState) {
+                gameState.itemsInUseClasses = action.payload.value;
+            } 
+        }
       }
   })
 
@@ -189,6 +209,6 @@ export const spoilerFilterSelector = createSelector(
 }
 
 
-export const { storeAll, storeItem, storeItemsInUse, storeEnableStoreStockManagement, storeDiscount, storeDisplayAs, storeScenarioCompleted, storeSoloClass, storeProsperity, storeSpoilerFilter} = spoilerSlice.actions;
+export const { storeItemsInUseClasses, storeClassesInUse, storeAll, storeItem, storeItemsInUse, storeEnableStoreStockManagement, storeDiscount, storeDisplayAs, storeScenarioCompleted, storeSoloClass, storeProsperity, storeSpoilerFilter} = spoilerSlice.actions;
 
 export default spoilerSlice.reducer;

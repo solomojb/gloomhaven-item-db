@@ -9,6 +9,7 @@ import useItems  from '../../../hooks/useItems'
 import {useGame } from '../../Game/GameProvider';
 import { GameType } from '../../../games';
 import { LOCAL_STORAGE_PREFIX } from '../../../games/GameData';
+import Party from '../Party/Party';
 
 const MainView = () => {
     const { localStorageKey, convertSavedData, key:gameType} = useGame();
@@ -67,6 +68,7 @@ const MainView = () => {
     let panes = [
         { menuItem: 'Item List',                render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<ItemList items={items}/>}</Tab.Pane> },
         { menuItem: 'Spoiler Configuration',    render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<SpoilerFilters/>}</Tab.Pane>},
+        { menuItem: 'Party',                    render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<Party/>}</Tab.Pane>},
         { menuItem: 'Share',                    render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<Share/>}</Tab.Pane>},
     ];
 

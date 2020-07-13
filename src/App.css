@@ -189,6 +189,38 @@ img.item-card {
     left: 7px;
     top: 50px;
 }
+.item-card-wrapper .r-ss-wrap.i0 {
+    position: absolute;
+    background-color: #ffffff;
+    opacity: .75;
+    left: 0px;
+    top: 0px;
+    width: 50%;
+}
+.item-card-wrapper .r-ss-wrap.i1 {
+    position: absolute;
+    background-color: #ffffff;
+    opacity: .75;
+    left: 0px;
+    top: 40px;
+    width: 50%;
+}
+.item-card-wrapper .r-ss-wrap.i2 {
+    position: absolute;
+    background-color: #ffffff;
+    opacity: .75;
+    right: 0px;
+    top: 0px;
+    width: 50%;
+}
+.item-card-wrapper .r-ss-wrap.i3 {
+    position: absolute;
+    background-color: #ffffff;
+    opacity: .75;
+    right: 0px;
+    top: 40px;
+    width: 50%;
+}
 .item-card-wrapper .ui.toggle.checkbox.i1 {
     left: 7px;
     top: 85px;
