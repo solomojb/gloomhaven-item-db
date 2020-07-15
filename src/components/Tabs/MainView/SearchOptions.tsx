@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { storeDisplayAs, storeDiscount, getSpoilerFilter } from '../../../State/SpoilerFilter';
 import { storeFilterSearch, storeFilterSlots, getItemViewState } from '../../../State/ItemViewState';
 import { getSlotImageSrc } from '../../../helpers';
-import { GloomhavenItemSlot, SortProperty} from '../../../State/Types';
-import { useGame } from '../../Game/GameProvider';
+import { GloomhavenItemSlot, SortProperty, SoloClassShorthand} from '../../../State/Types';
 import PartyDropdown from './PartyDropdown';
+import { useGame } from '../../Game/GameProvider';
 
 type Props = {
     setSorting : (newProperty: SortProperty) => void;
@@ -15,7 +15,7 @@ type Props = {
 const SearchOptions = (props:Props) => {
     const { setSorting } =  props;
     const gloomhavenItemSlots: Array<GloomhavenItemSlot> = ['Head', 'Body', 'Legs', 'One Hand', 'Two Hands', 'Small Item'];
-    const { displayAs, discount } = getSpoilerFilter();
+    const { displayAs, discount, enablePartyManagement } = getSpoilerFilter();
     const { property, search, slots } = getItemViewState();
     const dispatch = useDispatch();
     const { key: gameType } = useGame();
@@ -112,10 +112,10 @@ const SearchOptions = (props:Props) => {
                         placeholder={'Search...'}
                     />
                 </Form.Group>
-                <Form.Group inline>
-                    <label>Class:</label>
+                {enablePartyManagement && <Form.Group inline>
+                    <label>Fliter by Class:</label>
                     <PartyDropdown/>
-                </Form.Group>
+                </Form.Group>}
             </Form>
         </React.Fragment>
     );

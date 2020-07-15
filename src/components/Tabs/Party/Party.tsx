@@ -25,7 +25,7 @@ const Party = () => {
             <p>Select mercanaries that are in use.</p>
             <Form>
                 <Form.Group inline className={'inline-break'}>
-                    <label>Solo Class Items:</label>
+                    <label>Classes in use:</label>
                     {GloomhavenSoloClassShorthands.map(key => (
                         <Image key={key} src={require(`../../../img/classes/${key}.png`)}
                             className={'icon' + (classesInUse.includes(key) ? '' : ' disabled')}

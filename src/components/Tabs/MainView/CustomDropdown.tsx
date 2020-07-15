@@ -1,11 +1,9 @@
 import React from 'react'
-import { Image } from 'semantic-ui-react';
-import '../../../react-super-select.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { getSpoilerFilter, storeItemsInUseClasses } from '../../../State/SpoilerFilter';
 import { RootState } from '../../../State/Reducer';
 import { SoloClassShorthand } from '../../../State/Types';
-import SuperSelectWrapper from './SuperSelectWrapper';
+import ClassDropdown from './ClassDropdown';
 import { useGame } from '../../Game/GameProvider';
 
 type Props = 
@@ -14,12 +12,6 @@ type Props =
   item: any;
   className: string;
 }
-
-type ClassOption = {
-  id:number;
-  soloClass: SoloClassShorthand;
-}
-
 
 const CustomDropdown = (props:Props) => {
     const {index, item, className} = props;
@@ -49,49 +41,27 @@ const CustomDropdown = (props:Props) => {
       dispatch(storeItemsInUseClasses({value:newItemsInUse, gameType}));
   }
 
-    const allClasses:Array<ClassOption> = classesInUse.map( (soloClass:SoloClassShorthand, index:number) => {
-          return { id: index, soloClass}
-        })
-
-    const filterClasses = (option:ClassOption) => {
+    const filterClasses = (soloClass:SoloClassShorthand) => {
+      if (!classesInUse.includes(soloClass)) {
+        return false;
+      }
       const itemClasses = itemsInUseClasses[item.id] || [];
-      const found = itemClasses.includes(option.soloClass)
-      return !found;
+      return !itemClasses.includes(soloClass)
     }
   
-      var handlerExample = function(option:ClassOption) {
-
-        if (!option) {
-          console.log('custom_filter_function_output', "no option chosen");
-          toggleItemsInUse(undefined);
-          return;
-        }
-
-        toggleItemsInUse(option.soloClass);
-      };
-
-    var customOptionTemplate = function(item:ClassOption) {
-      return(
-        <div>
-          <Image  key={item.soloClass} src={require(`../../../img/classes/${item.soloClass}.png`)}
-                  className={'icon'}
-              />
-        </div>);
-    };
-
-    const getInitialValue = () => {
+    const getInitialClass  = (): SoloClassShorthand => {
       const itemClasses = itemsInUseClasses[item.id] || [];
-      return allClasses.find( sc => sc.soloClass === itemClasses[index]);
+      const initClass = itemClasses[index];
+      return initClass;
     };
- 
+
     return (
-      <SuperSelectWrapper 
+      <ClassDropdown 
         customClass={className}
-        initialValue={getInitialValue()}
-        placeholder="None" 
-        onChange={handlerExample} 
-        customOptionTemplate={customOptionTemplate}
-        dataSource={allClasses.filter(filterClasses)} />
+        initialClass={getInitialClass()}
+        filter={filterClasses}
+        onChange={toggleItemsInUse} 
+       />
     );
 }
 

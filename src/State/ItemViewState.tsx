@@ -1,6 +1,6 @@
 import { GloomhavenItemSlot, SoloClassShorthand, SortDirection, SortProperty } from "./Types";
 import { GameType } from "../games";
-import { createSelector } from "reselect";
+import { createSelector } from "reselect"
 import { RootState } from "./Reducer";
 import memoize from 'lodash.memoize'
 import { useGame } from "../components/Game/GameProvider";

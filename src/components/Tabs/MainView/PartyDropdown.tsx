@@ -1,31 +1,31 @@
 import React from 'react'
-import '../../../react-super-select.css'
 import { useDispatch } from 'react-redux';
-import { storeFilterClass } from '../../../State/ItemViewState';
-import ClassDropdown, {ClassOption} from './ClassDropdown';
+import { getItemViewState, storeFilterClass } from '../../../State/ItemViewState';
 import { getSpoilerFilter } from '../../../State/SpoilerFilter';
+import { SoloClassShorthand } from '../../../State/Types';
 import { useGame } from '../../Game/GameProvider';
+import ClassDropdown from './ClassDropdown';
+
 
 const PartyDropdown = () => {
-    const { key: gameType} = useGame();
+    const {key:gameType} = useGame();
+     const { soloClass: filteredSoloClass } = getItemViewState();
      const { classesInUse } = getSpoilerFilter();
      const dispatch = useDispatch();
 
-      const onChange = function(option:ClassOption) {
-
-        if (!option) {
-          console.log('custom_filter_function_output', "no option chosen");
-          dispatch(storeFilterClass({value:undefined, gameType}));
-          return;
-        }
-        dispatch(storeFilterClass({value:option.soloClass, gameType}));
+      const onChange = function(soloClass:SoloClassShorthand | undefined) {
+        dispatch(storeFilterClass({value:soloClass, gameType}));
       };
 
+      const filter = (soloClass:SoloClassShorthand) => {
+        return soloClass !== filteredSoloClass && classesInUse.includes(soloClass);
+      };
+ 
     return (
         <ClassDropdown 
-          placeholder="Choose a class" 
-          onChange={onChange} 
-          classes={classesInUse}/>
+          filter={filter}
+          placeholder="Choose Class" 
+          onChange={onChange}/>
     );
 }
 

@@ -13,13 +13,13 @@ type Props = {
 const ItemManagement = (props:Props) => {
     const { key:gameType } = useGame();
     const {item} = props;
-    const { enableStoreStockManagement, lockSpoilerPanel, itemsInUse } = getSpoilerFilter();
+    const { enableStoreStockManagement, enablePartyManagement, lockSpoilerPanel, itemsInUse } = getSpoilerFilter();
     const dispatch = useDispatch();
 
-    if (!enableStoreStockManagement) {
-        return (<>
+    if (!enableStoreStockManagement && !enablePartyManagement) {
+        return <>
                 {item.count}
-                </>)
+                </>
     }
 
     const toggleItemInUse = (id: number, bit: number) => {
@@ -37,13 +37,13 @@ const ItemManagement = (props:Props) => {
         <>
             {[...Array(item.count).keys()].map(index =>
                 <Fragment key={"cb" + index}>
-                    <Checkbox key={"cb" + index}
+                    {enablePartyManagement && <CustomDropdown className={'itemmanagement i' + index} index={index} item={item}/>}
+                    {enableStoreStockManagement && <Checkbox key={"cb" + index}
                             className={'i'+index}
                             toggle
                             disabled={lockSpoilerPanel}
                             checked={!!(itemsInUse[item.id] & Math.pow(2, index))}
-                            onChange={() => toggleItemInUse(item.id, Math.pow(2, index))}/>
-                    <CustomDropdown className={'i' + index} index={index} item={item}/>
+                            onChange={() => toggleItemInUse(item.id, Math.pow(2, index))}/>}
                 </Fragment>
             )}
         </>

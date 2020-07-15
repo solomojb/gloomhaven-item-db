@@ -28,6 +28,7 @@ export interface SpoilerFilter {
     discount: number
     displayAs: ItemViewDisplayType
     enableStoreStockManagement: boolean
+    enablePartyManagement: boolean
     lockSpoilerPanel: boolean
     scenarioCompleted: Array<number>
 }
@@ -50,6 +51,7 @@ const initialSpoilerFilterState:SpoilerFilter = {
     discount: 0,
     displayAs: 'list',
     enableStoreStockManagement: false,
+    enablePartyManagement: false,
     lockSpoilerPanel: false,
     scenarioCompleted: [],
 };
@@ -114,6 +116,12 @@ const initialSpoilerMapState = Object.values(GameType).reduce(
             const gameState = state[action.payload.gameType]; 
             if (gameState) {
                 gameState.enableStoreStockManagement = action.payload.value;
+            } 
+        },        
+        storeEnablePartyManagement(state, action: PayloadAction<GameTypeAction<boolean>>) {
+            const gameState = state[action.payload.gameType]; 
+            if (gameState) {
+                gameState.enablePartyManagement = action.payload.value;
             } 
         },        
         storeDisplayAs(state, action: PayloadAction<GameTypeAction<ItemViewDisplayType>>) {
@@ -209,6 +217,6 @@ export const spoilerFilterSelector = createSelector(
 }
 
 
-export const { storeItemsInUseClasses, storeClassesInUse, storeAll, storeItem, storeItemsInUse, storeEnableStoreStockManagement, storeDiscount, storeDisplayAs, storeScenarioCompleted, storeSoloClass, storeProsperity, storeSpoilerFilter} = spoilerSlice.actions;
+export const { storeEnablePartyManagement, storeItemsInUseClasses, storeClassesInUse, storeAll, storeItem, storeItemsInUse, storeEnableStoreStockManagement, storeDiscount, storeDisplayAs, storeScenarioCompleted, storeSoloClass, storeProsperity, storeSpoilerFilter} = spoilerSlice.actions;
 
 export default spoilerSlice.reducer;

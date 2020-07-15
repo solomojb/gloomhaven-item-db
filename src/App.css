@@ -185,42 +185,28 @@ img.item-card {
     position: absolute;
 }
 
+img.ui.image.soloClass {
+    width: auto;
+    height: 30px;
+    background-color: white;
+    border: 1px solid black;
+    opacity: 1;
+}
+
+i.dont.icon.soloClass {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border: 1px solid black;
+    opacity: 1;
+}
+
+
 .item-card-wrapper .ui.toggle.checkbox.i0 {
     left: 7px;
     top: 50px;
 }
-.item-card-wrapper .r-ss-wrap.i0 {
-    position: absolute;
-    background-color: #ffffff;
-    opacity: .75;
-    left: 0px;
-    top: 0px;
-    width: 50%;
-}
-.item-card-wrapper .r-ss-wrap.i1 {
-    position: absolute;
-    background-color: #ffffff;
-    opacity: .75;
-    left: 0px;
-    top: 40px;
-    width: 50%;
-}
-.item-card-wrapper .r-ss-wrap.i2 {
-    position: absolute;
-    background-color: #ffffff;
-    opacity: .75;
-    right: 0px;
-    top: 0px;
-    width: 50%;
-}
-.item-card-wrapper .r-ss-wrap.i3 {
-    position: absolute;
-    background-color: #ffffff;
-    opacity: .75;
-    right: 0px;
-    top: 40px;
-    width: 50%;
-}
+
 .item-card-wrapper .ui.toggle.checkbox.i1 {
     left: 7px;
     top: 85px;
@@ -234,6 +220,76 @@ img.item-card {
     right: 7px;
     top: 85px;
 }
+
+.item-card-wrapper .ui.top.left.pointing.dropdown.itemmanagement.i0
+{
+    position: absolute;
+    left: 7px;
+    top: 50px;
+}
+
+.item-card-wrapper .ui.top.left.pointing.dropdown.itemmanagement.i1
+{
+    position: absolute;
+    left: 7px;
+    top: 85px;
+}
+
+.item-card-wrapper .ui.top.left.pointing.dropdown.itemmanagement.i2
+{
+    position: absolute;
+    right: 7px;
+    top: 50px;
+}
+
+.item-card-wrapper .ui.top.left.pointing.dropdown.itemmanagement.i3
+{
+    position: absolute;
+    right: 7px;
+    top: 85px;
+}
+
+.store-inventory-col .ui.top.left.pointing.dropdown.itemmanagement.i0
+{
+    position: relative;
+    left: 0px;
+    top: 0px;
+}
+
+.store-inventory-col .ui.top.left.pointing.dropdown.itemmanagement.i1
+{
+    position: relative;
+    left: 0px;
+    top: 0px;
+}
+
+.store-inventory-col .ui.top.left.pointing.dropdown.itemmanagement.i2
+{
+    position: relative;
+    right: 0px;
+    top: 0px;
+}
+
+.store-inventory-col .ui.top.left.pointing.dropdown.itemmanagement.i3
+{
+    position: relative;
+    right: 0px;
+    top: 0px;
+}
+
+
+
+.nooption
+{
+    min-width: 30px;
+    min-height: 30px;
+
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+
 
 .ui.form .fields.inline-break {
     display: initial;
