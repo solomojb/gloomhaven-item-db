@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Icon, Message } from 'semantic-ui-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../State/Reducer';
+import { SignUpForm } from '../SignUp';
 
 type Props = {
 }
@@ -10,12 +11,26 @@ const Share = (props:Props) => {
     const {} = props;
     const spoilerFilter = useSelector<RootState>( state => state.spoilerFilter) as RootState['spoilerFilter'];
     const [ shareLockSpoilerPanel, setShareLockSpoilerPanel] = useState(false);
+    const [ peerId, setPeerId] = useState<string>();
+    const [ serverPeerId, setServerPeerId] = useState<string>();
 
     const shareUrl = location.origin + location.pathname + '#' + btoa(JSON.stringify({
         ...spoilerFilter,
         lockSpoilerPanel: shareLockSpoilerPanel
     }));
 
+<<<<<<< HEAD
+=======
+    const importData = () => {
+        console.log("I am going to import from the db")
+    }
+
+    const exportData = () => {
+        console.log("I am going to export to the db")
+    }
+
+
+>>>>>>> 005c613... Added Basic auth
     return (
         <>
             <p>Here you can generate a link to this app with your current spoiler configuration.</p>
@@ -37,6 +52,11 @@ const Share = (props:Props) => {
                         (document.getElementById('share-url-input') as HTMLInputElement).select();
                         document.execCommand("copy");
                     }}>Copy</Form.Button>
+                </Form.Group>
+                 <Form.Group>
+                     <SignUpForm/>
+                    <Form.Button onClick={() => importData()}>Import</Form.Button>
+                    <Form.Button onClick={() => exportData()}>Export</Form.Button>
                 </Form.Group>
             </Form>
         </>
