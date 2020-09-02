@@ -40,12 +40,12 @@ const INITIAL_STATE = {
             return;
         firebase.doCreateUserWithEmailAndPassword(email, passwordOne)
           .then((authUser:any) => {
-            setUsername('');
-            setEmail('');
-            setPasswordOne('');
-            setPasswordTwo('');
-            setError(null);
-            // this.props.history.push(ROUTES.HOME);
+            return firebase
+            .user(authUser.user.uid)
+            .set({
+              username,
+              email,
+            });
           })
           .catch((error: Error) => {
             setError(error);
