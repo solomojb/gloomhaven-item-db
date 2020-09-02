@@ -3,6 +3,9 @@ import { Form, Icon, Message } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../State/Reducer';
 import { SignUpForm } from '../SignUp';
+import { SignInForm } from '../SignIn';
+import SignOutButton from '../SignOut';
+import Firebase, { useFirebase } from '../Firebase';
 
 type Props = {
 }
@@ -11,16 +14,13 @@ const Share = (props:Props) => {
     const {} = props;
     const spoilerFilter = useSelector<RootState>( state => state.spoilerFilter) as RootState['spoilerFilter'];
     const [ shareLockSpoilerPanel, setShareLockSpoilerPanel] = useState(false);
-    const [ peerId, setPeerId] = useState<string>();
-    const [ serverPeerId, setServerPeerId] = useState<string>();
+    const { firebase, authUser} = useFirebase();
 
     const shareUrl = location.origin + location.pathname + '#' + btoa(JSON.stringify({
         ...spoilerFilter,
         lockSpoilerPanel: shareLockSpoilerPanel
     }));
 
-<<<<<<< HEAD
-=======
     const importData = () => {
         console.log("I am going to import from the db")
     }
@@ -28,9 +28,7 @@ const Share = (props:Props) => {
     const exportData = () => {
         console.log("I am going to export to the db")
     }
-
-
->>>>>>> 005c613... Added Basic auth
+    
     return (
         <>
             <p>Here you can generate a link to this app with your current spoiler configuration.</p>
@@ -54,11 +52,14 @@ const Share = (props:Props) => {
                     }}>Copy</Form.Button>
                 </Form.Group>
                  <Form.Group>
-                     <SignUpForm/>
                     <Form.Button onClick={() => importData()}>Import</Form.Button>
                     <Form.Button onClick={() => exportData()}>Export</Form.Button>
                 </Form.Group>
             </Form>
+            {!authUser && <SignUpForm/>}
+            {!authUser && <SignInForm/>}  
+            {authUser && <SignOutButton/> } 
+            { authUser && authUser.email}                 
         </>
     );
 }

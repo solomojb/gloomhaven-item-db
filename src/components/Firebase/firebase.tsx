@@ -43,5 +43,6 @@ const firebaseConfig = {
       })
     }
   }
+
   
   export default Firebase;

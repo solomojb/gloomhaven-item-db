@@ -27,7 +27,7 @@ const INITIAL_STATE = {
 
 
   const SignUpForm = (props: Props): JSX.Element  => {
-      const firebase:Firebase | undefined = useFirebase();
+      const { firebase } = useFirebase();
   // Consider using a slice here?
       const [username, setUsername] = useState<string>('');
       const [email, setEmail] = useState<string>('');

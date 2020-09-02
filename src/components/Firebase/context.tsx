@@ -1,7 +1,12 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext, useEffect } from 'react';
 import Firebase from './firebase';
 
-const FirebaseContext = createContext<Firebase | undefined>(undefined);
+type FirebaseContextData = {
+    firebase: Firebase | null | undefined;
+    authUser: firebase.User | null | undefined;
+}
+
+const FirebaseContext = createContext<FirebaseContextData>({firebase:null, authUser: null});
 
 export function useFirebase() {
     return useContext(FirebaseContext);
@@ -10,9 +15,21 @@ export function useFirebase() {
 const { Provider } = FirebaseContext;
 
 const FirebaseProvider: React.FC<{}> = ({ children }) => {
-    const [firebase, setFirebase] = useState<Firebase | undefined>(new Firebase());
+    console.log("In here");
+    const [firebase, setFirebase] = useState<Firebase>();
+    const [authUser, setAuthUser] = useState<firebase.User | null>();
+    useEffect( () => {
+        setFirebase(new Firebase());
+    }, [])
+    useEffect( () => {
+        if (!firebase)
+            return;
+        firebase.auth.onAuthStateChanged(authUser => {
+            setAuthUser( authUser )
+            });
+    }, [firebase])
 
-    return <Provider value={firebase}>{children}</Provider>
+    return <Provider value={{firebase,authUser}}>{children}</Provider>
 }
  
 export default FirebaseProvider;
