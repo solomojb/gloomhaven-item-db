@@ -32,8 +32,9 @@ const firebaseConfig = {
   doPasswordReset = (email: string) => this.auth.sendPasswordResetEmail(email);
  
   doPasswordUpdate = (password: string) =>{
-    if (!this.auth.currentUser)
-      return;
+    if (!this.auth.currentUser) {
+      throw new Error("Current user doesn't exist");
+    }
     return this.auth.currentUser.updatePassword(password);
   }
 

@@ -6,6 +6,8 @@ import { SignUpForm } from '../SignUp';
 import { SignInForm } from '../SignIn';
 import SignOutButton from '../SignOut';
 import Firebase, { useFirebase } from '../Firebase';
+import { PasswordForgetForm } from '../PasswordForgotten';
+import PasswordChangeForm from '../PasswordChange';
 
 type Props = {
 }
@@ -58,6 +60,8 @@ const Share = (props:Props) => {
             </Form>
             {!authUser && <SignUpForm/>}
             {!authUser && <SignInForm/>}  
+            {!authUser && <PasswordForgetForm/>}  
+            {!authUser && <PasswordChangeForm/>}  
             {authUser && <SignOutButton/> } 
             { authUser && authUser.email}                 
         </>
