@@ -1,14 +1,22 @@
 import React, { useState, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { useFirebase } from '../Firebase';
+import { useFirebase } from '../../../../Firebase';
 
-import * as ROUTES from '../../constants/routes';
-import Firebase from '../Firebase';
+import * as ROUTES from '../../../../../constants/routes';
+import Firebase from '../../../../Firebase';
+import { useDispatch } from 'react-redux';
+import { SubView, storeAccountSubView } from '../../../../../State/AccountState';
+import { SignUpLink } from '../SignUp';
+import { PasswordForgetForm, PasswordForgetLink } from '../PasswordForgotten';
+import { PasswordChangeLink } from '../PasswordChange';
 
 const SignInPage = () => (
   <div>
     <h1>SignIn</h1>
         <SignInForm/>
+        <SignUpLink/>
+        <PasswordForgetLink/>
+        <PasswordChangeLink/>
   </div>
 );
  
@@ -26,6 +34,7 @@ const SignInForm = (props: Props): JSX.Element  => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<Error| null>(null);
+    const dispatch = useDispatch();
 
     const onSubmit = (event: any) => {
         if (!firebase)
@@ -37,6 +46,7 @@ const SignInForm = (props: Props): JSX.Element  => {
                 setEmail('');
                 setPassword('');
                 setError(null);
+                dispatch(storeAccountSubView(SubView.SignedIn))
         //        this.props.history.push(ROUTES.HOME);
             })
             .catch(error => {
@@ -70,13 +80,21 @@ const SignInForm = (props: Props): JSX.Element  => {
     );
 }
 
-const SignInLink = () => (
-    <p>
-      Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign In</Link>
+const SignInLink = () => {
+  const dispatch = useDispatch();
+  return <p>
+    Already have an account? <button onClick={ () =>  dispatch(storeAccountSubView(SubView.SignIn))}>Sign In</button>
+  </p>
+  };
+
+  const BackToSignInLink = () => {
+    const dispatch = useDispatch();
+    return <p>
+      Go back to login? <button onClick={ () =>  dispatch(storeAccountSubView(SubView.SignIn))}>Sign In</button>
     </p>
-  );
+    };
   
  
 export default SignInPage;
  
-export { SignInForm, SignInLink };
+export { SignInForm, SignInLink, BackToSignInLink };

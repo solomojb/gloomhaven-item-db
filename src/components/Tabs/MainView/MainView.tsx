@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import SpoilerFilter, { storeSpoilerFilter, restoreFromLocalStorage } from '../../../State/SpoilerFilter';
 import ItemList from './ItemList';
 import SpoilerFilters from '../SpoilerFilters/SpoilerFilters';
-import Share from '../Share';
+import Share from '../Share/Share';
 import useItems  from '../../../hooks/useItems'
 import {useGame } from '../../Game/GameProvider';
 import {store} from '../../../App'

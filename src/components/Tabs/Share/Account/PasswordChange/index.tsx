@@ -1,6 +1,9 @@
 import React, { Component, useState, ChangeEvent } from 'react';
  
-import { useFirebase } from '../Firebase';
+import { useFirebase } from '../../../../Firebase';
+import { useDispatch } from 'react-redux';
+import { storeAccountSubView, SubView } from '../../../../../State/AccountState';
+import { BackToSignInLink } from '../SignIn';
  
 const INITIAL_STATE = {
   passwordOne: '',
@@ -60,5 +63,21 @@ const PasswordChangeForm = () => {
       </form>
     );
   }
+
+  const PasswordChangeLink = () => {
+    const dispatch = useDispatch();
+    return <p>
+      Change your password? <button onClick={ () =>  dispatch(storeAccountSubView(SubView.ChangePassword))}>Change Password</button>
+    </p>
+};
+
+const PasswordChangePage = () => {
+  return <>
+      <h1>Change Password</h1>
+      <PasswordChangeForm/>
+      <BackToSignInLink/>
+      </>
+}
  
 export default PasswordChangeForm;
+export { PasswordChangePage, PasswordChangeLink };

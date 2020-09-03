@@ -1,15 +1,19 @@
 import React, { useState, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { useFirebase } from '../Firebase';
+import { useFirebase } from '../../../../Firebase';
 
-import * as ROUTES from '../../constants/routes';
-import Firebase from '../Firebase';
+import * as ROUTES from '../../../../../constants/routes';
+import Firebase from '../../../../Firebase';
+import { storeAccountSubView, SubView } from '../../../../../State/AccountState';
+import { useDispatch } from 'react-redux';
+import { SignInLink } from '../SignIn';
 
  
 const SignUpPage = () => (
   <div>
     <h1>SignUp</h1>
       <SignUpForm/>
+      <SignInLink/>
     </div>
 );
 
@@ -96,11 +100,12 @@ const INITIAL_STATE = {
       )
   }
 
-const SignUpLink = () => (
-  <p>
-    Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+const SignUpLink = () => {
+  const dispatch = useDispatch();
+  return <p>
+    Don't have an account? <button onClick={ () =>  dispatch(storeAccountSubView(SubView.SignUp))}>Sign Up</button>
   </p>
-);
+};
 
 
 export default SignUpPage;

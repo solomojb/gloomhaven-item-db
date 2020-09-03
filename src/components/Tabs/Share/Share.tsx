@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Icon, Message } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../State/Reducer';
-import { SignUpForm } from '../SignUp';
-import { SignInForm } from '../SignIn';
-import SignOutButton from '../SignOut';
-import Firebase, { useFirebase } from '../Firebase';
-import { PasswordForgetForm } from '../PasswordForgotten';
-import PasswordChangeForm from '../PasswordChange';
+import { RootState } from '../../../State/Reducer';
+import { SignUpForm } from './Account/SignUp';
+import { SignInForm } from './Account/SignIn';
+import SignOutButton from './Account/SignOut';
+import Firebase, { useFirebase } from '../../Firebase';
+import { PasswordForgetForm } from './Account/PasswordForgotten';
+import PasswordChangeForm from './Account/PasswordChange';
+import AccountView from './AccountView';
 
 type Props = {
 }
@@ -16,7 +17,6 @@ const Share = (props:Props) => {
     const {} = props;
     const spoilerFilter = useSelector<RootState>( state => state.spoilerFilter) as RootState['spoilerFilter'];
     const [ shareLockSpoilerPanel, setShareLockSpoilerPanel] = useState(false);
-    const { firebase, authUser} = useFirebase();
 
     const shareUrl = location.origin + location.pathname + '#' + btoa(JSON.stringify({
         ...spoilerFilter,
@@ -58,12 +58,13 @@ const Share = (props:Props) => {
                     <Form.Button onClick={() => exportData()}>Export</Form.Button>
                 </Form.Group>
             </Form>
-            {!authUser && <SignUpForm/>}
-            {!authUser && <SignInForm/>}  
-            {!authUser && <PasswordForgetForm/>}  
-            {!authUser && <PasswordChangeForm/>}  
-            {authUser && <SignOutButton/> } 
-            { authUser && authUser.email}                 
+            <AccountView/>
+            <Form>
+                <Form.Group>
+                    <Form.Button onClick={() => importData()}>Import</Form.Button>
+                    <Form.Button onClick={() => exportData()}>Export</Form.Button>
+                </Form.Group>
+            </Form>
         </>
     );
 }
