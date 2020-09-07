@@ -1,14 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Form, Icon, Message } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../State/Reducer';
-import { SignUpForm } from './Account/SignUp';
-import { SignInForm } from './Account/SignIn';
-import SignOutButton from './Account/SignOut';
-import Firebase, { useFirebase } from '../../Firebase';
-import { PasswordForgetForm } from './Account/PasswordForgotten';
-import PasswordChangeForm from './Account/PasswordChange';
-import AccountView from './AccountView';
+import { useFirebase } from '../../Firebase';
 
 type Props = {
 }
@@ -17,6 +11,7 @@ const Share = (props:Props) => {
     const {} = props;
     const spoilerFilter = useSelector<RootState>( state => state.spoilerFilter) as RootState['spoilerFilter'];
     const [ shareLockSpoilerPanel, setShareLockSpoilerPanel] = useState(false);
+    const { firebase, authUser} = useFirebase();
 
     const shareUrl = location.origin + location.pathname + '#' + btoa(JSON.stringify({
         ...spoilerFilter,
@@ -24,11 +19,27 @@ const Share = (props:Props) => {
     }));
 
     const importData = () => {
-        console.log("I am going to import from the db")
+        if (!firebase || !authUser) {
+            throw Error("No firebase or auth user")
+            return;
+        }
+        firebase
+            .spoilerFilter(authUser.uid).on("value", (snapshot) => {
+                console.log(snapshot.val());
+            },
+            (error: any)=> console.log(error))
     }
 
     const exportData = () => {
-        console.log("I am going to export to the db")
+        if (!firebase || !authUser) {
+            throw Error("No firebase or auth user")
+            return;
+        }
+        firebase
+            .spoilerFilter(authUser.uid)
+            .set({
+                spoilerFilter,
+            });
     }
     
     return (
@@ -53,12 +64,7 @@ const Share = (props:Props) => {
                         document.execCommand("copy");
                     }}>Copy</Form.Button>
                 </Form.Group>
-                 <Form.Group>
-                    <Form.Button onClick={() => importData()}>Import</Form.Button>
-                    <Form.Button onClick={() => exportData()}>Export</Form.Button>
-                </Form.Group>
             </Form>
-            <AccountView/>
             <Form>
                 <Form.Group>
                     <Form.Button onClick={() => importData()}>Import</Form.Button>

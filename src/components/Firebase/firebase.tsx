@@ -48,6 +48,7 @@ const firebaseConfig = {
     }
 
     user = (uid:string) => this.db.ref(`users/${uid}`);
+    spoilerFilter = (uid:string) => this.db.ref(`spoilerFilter/${uid}`);
   }
 
   

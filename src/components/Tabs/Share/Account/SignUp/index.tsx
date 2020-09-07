@@ -1,11 +1,9 @@
 import React, { useState, ChangeEvent } from 'react';
+import { useHistory} from 'react-router';
 import { Link } from 'react-router-dom';
 import { useFirebase } from '../../../../Firebase';
 
 import * as ROUTES from '../../../../../constants/routes';
-import Firebase from '../../../../Firebase';
-import { storeAccountSubView, SubView } from '../../../../../State/AccountState';
-import { useDispatch } from 'react-redux';
 import { SignInLink } from '../SignIn';
 
  
@@ -38,18 +36,20 @@ const INITIAL_STATE = {
       const [passwordOne, setPasswordOne] = useState<string>('');
       const [passwordTwo, setPasswordTwo] = useState<string>('');
       const [error, setError] = useState<Error| null>(null);
+      const history = useHistory();
 
       const onSubmit = (event: any) => {
           if (!firebase)
             return;
         firebase.doCreateUserWithEmailAndPassword(email, passwordOne)
           .then((authUser:any) => {
-            return firebase
+            firebase
             .user(authUser.user.uid)
             .set({
               username,
               email,
             });
+            history.push(ROUTES.GH);
           })
           .catch((error: Error) => {
             setError(error);
@@ -101,9 +101,8 @@ const INITIAL_STATE = {
   }
 
 const SignUpLink = () => {
-  const dispatch = useDispatch();
   return <p>
-    Don't have an account? <button onClick={ () =>  dispatch(storeAccountSubView(SubView.SignUp))}>Sign Up</button>
+    Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
   </p>
 };
 

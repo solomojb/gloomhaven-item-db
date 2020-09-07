@@ -1,9 +1,8 @@
 import {combineReducers } from "redux";
 import {spoilerFilter} from "./SpoilerFilter"
 import {itemViewState} from "./ItemViewState"
-import { accountState } from "./AccountState"
 
-const rootReducer = combineReducers( { itemViewState, spoilerFilter, accountState} );
+const rootReducer = combineReducers( { itemViewState, spoilerFilter} );
 
 export type RootState = ReturnType<typeof rootReducer>;
 

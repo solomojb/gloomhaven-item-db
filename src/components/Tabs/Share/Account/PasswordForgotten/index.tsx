@@ -1,10 +1,8 @@
-import React, { Component, useState, ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, ChangeEvent } from 'react';
+import { Link, useHistory } from 'react-router-dom';
  
 import { useFirebase } from '../../../../Firebase';
 import * as ROUTES from '../../../../../constants/routes';
-import { useDispatch } from 'react-redux';
-import { storeAccountSubView, SubView } from '../../../../../State/AccountState';
 import { BackToSignInLink } from '../SignIn';
  
 const PasswordForgetPage = () => (
@@ -24,7 +22,7 @@ const PasswordForgetForm = () => {
     const { firebase } = useFirebase();
     const [email, setEmail] = useState<string>('');
     const [error, setError] = useState<Error| null>(null);
-    const dispatch = useDispatch();
+    const history = useHistory();
     
   const onSubmit = (event: any) => {
       if (!firebase)
@@ -34,7 +32,7 @@ const PasswordForgetForm = () => {
       .then(() => {
         setEmail("");
         setError(null);
-        dispatch(storeAccountSubView(SubView.SignIn))
+        history.push(ROUTES.SIGN_IN);
       })
       .catch(error => {
         setError(error);
@@ -64,9 +62,8 @@ const PasswordForgetForm = () => {
 }
  
 const PasswordForgetLink = () => {
-    const dispatch = useDispatch();
     return <p>
-      Forgot your password? <button onClick={ () =>  dispatch(storeAccountSubView(SubView.ResetPassword))}>Reset Password</button>
+      Forgot your password? <Link to={ROUTES.PASSWORD_FORGET}>Reset Password</Link>
     </p>
 };
  
