@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
  
 import { useFirebase } from '../../../../Firebase';
+import { Form } from 'semantic-ui-react';
  
 const INITIAL_STATE = {
   passwordOne: '',
@@ -37,27 +38,27 @@ const PasswordChangeForm = () => {
       passwordOne !== passwordTwo || passwordOne === '';
  
     return (
-      <form onSubmit={onSubmit}>
-        <input
+      <Form onSubmit={onSubmit}>
+        <Form.Input
           name="passwordOne"
           value={passwordOne}
           onChange={(e:ChangeEvent<HTMLInputElement>) => setPasswordOne(e.target.value)}
           type="password"
           placeholder="New Password"
         />
-        <input
+        <Form.Input
           name="passwordTwo"
           value={passwordTwo}
           onChange={(e:ChangeEvent<HTMLInputElement>) => setPasswordTwo(e.target.value)}
           type="password"
           placeholder="Confirm New Password"
         />
-        <button disabled={isInvalid} type="submit">
+        <Form.Button disabled={isInvalid} type="submit">
           Reset My Password
-        </button>
+        </Form.Button>
  
         {error && <p>{error.message}</p>}
-      </form>
+      </Form>
     );
   }
  

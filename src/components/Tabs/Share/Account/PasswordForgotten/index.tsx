@@ -4,19 +4,15 @@ import { Link, useHistory } from 'react-router-dom';
 import { useFirebase } from '../../../../Firebase';
 import * as ROUTES from '../../../../../constants/routes';
 import { BackToSignInLink } from '../SignIn';
+import { Form } from 'semantic-ui-react';
  
 const PasswordForgetPage = () => (
   <div>
-    <h1>PasswordForget</h1>
+    <h1>Reset Password</h1>
     <PasswordForgetForm />
     <BackToSignInLink/>
   </div>
 );
- 
-const INITIAL_STATE = {
-  email: '',
-  error: null,
-};
  
 const PasswordForgetForm = () => {
     const { firebase } = useFirebase();
@@ -44,20 +40,20 @@ const PasswordForgetForm = () => {
     const isInvalid = email === '';
  
     return (
-      <form onSubmit={onSubmit}>
-        <input
+      <Form onSubmit={onSubmit}>
+        <Form.Input
             name="email"
             value={email}
             onChange={(e:ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             type="text"
             placeholder="Email Address"
         />
-        <button disabled={isInvalid} type="submit">
+        <Form.Button disabled={isInvalid} type="submit">
           Reset My Password
-        </button>
+        </Form.Button>
  
         {error && <p>{error.message}</p>}
-      </form>
+      </Form>
     );
 }
  

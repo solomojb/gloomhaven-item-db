@@ -6,6 +6,7 @@ import { useFirebase } from '../../../../Firebase';
 import * as ROUTES from '../../../../../constants/routes';
 import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForgotten';
+import { Form } from 'semantic-ui-react';
 
 const SignInPage = () => (
   <div>
@@ -53,25 +54,29 @@ const SignInForm = (props: Props): JSX.Element  => {
  
     const isInvalid = password === '' || email === '';
     return (
-        <form onSubmit={onSubmit}>
-           <input
+        <Form onSubmit={onSubmit}>
+          <Form.Group widths="equal">
+           <Form.Input
              name="email"
              value={email}
              onChange={(e:ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
              type="text"
              placeholder="Email Address"
            />
-             <input
+             <Form.Input
              name="passwordOne"
              value={password}
              onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
              type="password"
              placeholder="Password"
            />
-          <button disabled={isInvalid} type="submit">Sign In</button>
+          </Form.Group>
+          <Form.Group>
+          <Form.Button disabled={isInvalid} type="submit">Sign In</Form.Button>
  
-          {error && <p>{error.message}</p>}   
-        </form>
+          {error && <Form.Field>{error.message}</Form.Field>} 
+          </Form.Group>  
+        </Form>
     );
 }
 
