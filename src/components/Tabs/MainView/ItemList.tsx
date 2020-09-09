@@ -29,7 +29,7 @@ const ItemList = (props:Props) => {
             dispatch(storeSortingProperty(newProperty));
             dispatch(storeSortingDirection(newDirection));
         }
-        
+
     return (
         <>
             <SearchOptions setSorting={setSorting}/>
@@ -39,7 +39,9 @@ const ItemList = (props:Props) => {
                     You are currently viewing all possible items.
                 </Message>
             )}
-
+            {items.length === 0 && <Message negative>
+                No items found matching your filters and/or search criteria
+            </Message> }
             {displayAs === 'list' ? <ItemTable items={items} setSorting={setSorting}/> : <ItemGrid items={items}/>}
 
         </>

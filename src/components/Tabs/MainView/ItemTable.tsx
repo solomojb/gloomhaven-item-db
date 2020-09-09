@@ -27,12 +27,6 @@ const ItemTable = (props:Props) => {
     const { enableStoreStockManagement, discount } = useSelector<RootState>( state => state.spoilerFilter) as RootState['spoilerFilter'];
     const { property, direction } = useSelector<RootState>( state => state.itemViewState) as RootState['itemViewState'];
 
-    if (items.length === 0) {
-        return <Message negative>
-            No items found matching your filters and/or search criteria
-        </Message>
-    }
-
     // TODO: see what can be done as local state?
     // TODO: Move this into a component!
     const renderSummon = (item: GloomhavenItem) => {
