@@ -15,7 +15,6 @@ export function useFirebase() {
 const { Provider } = FirebaseContext;
 
 const FirebaseProvider: React.FC<{}> = ({ children }) => {
-    console.log("In here");
     const [firebase, setFirebase] = useState<Firebase>();
     const [authUser, setAuthUser] = useState<firebase.User | null>();
     useEffect( () => {

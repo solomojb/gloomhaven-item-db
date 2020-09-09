@@ -1,6 +1,4 @@
 import { GloomhavenItemSlot, GloomhavenItem, SortDirection, GloomhavenItemSourceType } from "../State/Types"
-import { useEffect, useState, useContext } from "react";
-import { Helpers } from "../helpers";
 import { useSelector } from "react-redux";
 import { RootState } from "../State/Reducer";
 import { useGame } from "../components/Game/GameProvider"
@@ -9,18 +7,12 @@ const gloomhavenItemSlots: Array<GloomhavenItemSlot> = ['Head', 'Body', 'Legs', 
 
 const useItems = (): Array<GloomhavenItem> => {
 
-    const { isItemShown, dataFile} = useGame();
+    const { isItemShown, initialItems, key} = useGame();
     const spoilerFilter = useSelector<RootState>( state => state.spoilerFilter) as RootState['spoilerFilter'];
     const { all, item: spoilerFilterItem } = spoilerFilter;
     const { property, direction, slots, search } = useSelector<RootState>( state => state.itemViewState) as RootState['itemViewState'];
 
-    const [initialItems, setInitialItems] = useState<Array<GloomhavenItem>>([]);
-
-    const deSpoilerItemSource = (source:string): string => {
-        return source.replace(/{(.{2})}/, (m, m1) => '<img class="icon" src="'+require('../img/classes/'+m1+'.png')+'" alt="" />');
-    }
-
-    const getFilteredItems = () => {
+    const getFilteredItems = (initialItems:Array<GloomhavenItem>) => {
         const spoilerFiltered = all ? initialItems : initialItems.filter(item => {
             if (isItemShown(item, spoilerFilter)) return true;
             return spoilerFilterItem.includes(item.id);
@@ -37,8 +29,8 @@ const useItems = (): Array<GloomhavenItem> => {
         });
     }
 
-    const getSortedAndFilteredItems = () => {
-        const items = getFilteredItems();
+    const getSortedAndFilteredItems = (initialItems:Array<GloomhavenItem>) => {
+        const items = getFilteredItems(initialItems);
         return (items.sort((itemA, itemB) => {
             let value = 0;
             switch (property) {
@@ -71,59 +63,7 @@ const useItems = (): Array<GloomhavenItem> => {
         }));
     }
 
-
-    useEffect( () => {
-        const items: Array<GloomhavenItem> = dataFile;
-
-        let slots: Array<string> = [];
-        let sources: Array<string> = [];
-        let sourceTypes: Array<GloomhavenItemSourceType> = [];
-
-        items.forEach(item => {
-
-            item.descHTML = Helpers.parseEffectText(item.desc);
-
-            let sourceType: string = item.source;
-
-            item.sourceTypes = [];
-
-            item.source.split("\n").forEach(itemSource => {
-                if (itemSource.match(/^Prosperity Level \d/)) {
-                    item.sourceTypes.push("Prosperity");
-                } else if (itemSource.match(/^Reward from Solo Scenario /)) {
-                    item.sourceTypes.push("Solo Scenario");
-                } else if (itemSource.match(/^(Reward From )?Scenario #\d+/)) {
-                    item.sourceTypes.push("Scenario");
-                } else if (itemSource === "Random Item Design") {
-                    item.sourceTypes.push("Random Item Design");
-                } else if (itemSource.match(/^City Event \d+/)) {
-                    item.sourceTypes.push("City Event");
-                } else if (itemSource.match(/^Road Event \d+/)) {
-                    item.sourceTypes.push("Road Event");
-                }
-            });
-
-            item.source = item.source.replace(/Reward from /ig, '');
-            item.source = item.source.replace(/ ?\((Treasure #\d+)\)/ig, "\n$1");
-            item.source = item.source.replace(/Solo Scenario #\d+ — /i, 'Solo ');
-            item.source = deSpoilerItemSource(item.source);
-
-            slots.push(item.slot);
-            sources.push(item.source);
-
-            sourceTypes = [...sourceTypes, ...item.sourceTypes];
-
-            if (!sources.includes(sourceType)) sources.push(sourceType);
-        });
-
-        slots = Helpers.uniqueArray(slots);
-        sourceTypes = Helpers.uniqueArray(sourceTypes);
-        sources = Helpers.uniqueArray(sources);
-
-        setInitialItems(items);
-    },[]);
-
-    return getSortedAndFilteredItems();
+    return getSortedAndFilteredItems(initialItems);
 }
 
 export default useItems;
