@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { Form, Icon, Message } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../State/Reducer';
 import { useFirebase } from '../../Firebase';
+import { storeSpoilerFilter } from '../../../State/SpoilerFilter';
+import { useGame } from '../../Game/GameProvider';
 
 type Props = {
 }
@@ -12,6 +14,8 @@ const Share = (props:Props) => {
     const spoilerFilter = useSelector<RootState>( state => state.spoilerFilter) as RootState['spoilerFilter'];
     const [ shareLockSpoilerPanel, setShareLockSpoilerPanel] = useState(false);
     const { firebase, authUser} = useFirebase();
+    const dispatch = useDispatch();
+    const {localStorageKey} = useGame();
 
     const shareUrl = location.origin + location.pathname + '#' + btoa(JSON.stringify({
         ...spoilerFilter,
@@ -25,7 +29,7 @@ const Share = (props:Props) => {
         }
         firebase
             .spoilerFilter(authUser.uid).on("value", (snapshot) => {
-                console.log(snapshot.val());
+                dispatch(storeSpoilerFilter(JSON.parse(snapshot.val()[localStorageKey])));
             },
             (error: any)=> console.log(error))
     }
@@ -35,11 +39,12 @@ const Share = (props:Props) => {
             throw Error("No firebase or auth user")
             return;
         }
+        const obj = {
+            [localStorageKey]:JSON.stringify(spoilerFilter),
+        };
         firebase
             .spoilerFilter(authUser.uid)
-            .set({
-                spoilerFilter,
-            });
+            .update(obj);
     }
     
     return (
@@ -64,11 +69,9 @@ const Share = (props:Props) => {
                         document.execCommand("copy");
                     }}>Copy</Form.Button>
                 </Form.Group>
-            </Form>
-            <Form>
                 <Form.Group>
                     <Form.Button onClick={() => importData()}>Import</Form.Button>
-                    <Form.Button onClick={() => exportData()}>Export</Form.Button>
+                    { authUser && !authUser.isAnonymous && <Form.Button onClick={() => exportData()}>Export</Form.Button> }
                 </Form.Group>
             </Form>
         </>
