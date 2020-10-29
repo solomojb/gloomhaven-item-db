@@ -1,26 +1,14 @@
 import React from 'react'
-import { Form, Button, Icon, Image } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../State/Reducer';
+import { Form, Button, Icon } from 'semantic-ui-react';
+import { useDispatch } from 'react-redux';
 import { storeEnableStoreStockManagement, storeEnablePartyManagement, storeAll, storeProsperity, storeSoloClass, getSpoilerFilter } from '../../../State/SpoilerFilter';
-import { SoloClassShorthand } from '../../../State/Types';
-import SpoilerFilterItemList from './SpoilerFilterItemList';
 import { useGame } from '../../Game/GameProvider';
 
 const SpoilerFilters = () => {
     const dispatch = useDispatch();
     const { spoilerFilter, key:gameType} = useGame();
 
-    const { soloClass, enableStoreStockManagement, enablePartyManagement, prosperity, all } = getSpoilerFilter();
-
-    const toggleClassFilter = (key: SoloClassShorthand) => {
-        if (soloClass.includes(key)) {
-            soloClass.splice(soloClass.indexOf(key), 1);
-        } else {
-            soloClass.push(key)
-        }
-        dispatch(storeSoloClass({value:soloClass, gameType}));
-    }
+    const { enableStoreStockManagement, enablePartyManagement, all } = getSpoilerFilter();
 
     return (
         <>

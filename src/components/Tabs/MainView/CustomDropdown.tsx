@@ -1,7 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getSpoilerFilter, storeItemsInUseClasses } from '../../../State/SpoilerFilter';
-import { RootState } from '../../../State/Reducer';
 import { SoloClassShorthand } from '../../../State/Types';
 import ClassDropdown from './ClassDropdown';
 import { useGame } from '../../Game/GameProvider';

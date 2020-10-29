@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { storeDisplayAs, storeDiscount, getSpoilerFilter } from '../../../State/SpoilerFilter';
 import { storeFilterSearch, storeFilterSlots, getItemViewState } from '../../../State/ItemViewState';
 import { getSlotImageSrc } from '../../../helpers';
-import { GloomhavenItemSlot, SortProperty, SoloClassShorthand} from '../../../State/Types';
+import { GloomhavenItemSlot, SortProperty} from '../../../State/Types';
 import PartyDropdown from './PartyDropdown';
 import { useGame } from '../../Game/GameProvider';
 
