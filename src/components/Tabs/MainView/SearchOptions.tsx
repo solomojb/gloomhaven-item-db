@@ -1,11 +1,10 @@
 import React from 'react'
-import { Form, Button, Input } from 'semantic-ui-react';
+import { Form, Button, Input, Image } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { storeDisplayAs, storeDiscount, getSpoilerFilter } from '../../../State/SpoilerFilter';
-import { storeFilterSearch, storeFilterSlots, getItemViewState } from '../../../State/ItemViewState';
+import { storeFilterSearch, storeFilterSlots, getItemViewState, storeFilterClass } from '../../../State/ItemViewState';
 import { getSlotImageSrc } from '../../../helpers';
-import { GloomhavenItemSlot, SortProperty} from '../../../State/Types';
-import PartyDropdown from './PartyDropdown';
+import { GloomhavenItemSlot, SoloClassShorthand, SortProperty} from '../../../State/Types';
 import { useGame } from '../../Game/GameProvider';
 
 type Props = {
@@ -15,8 +14,8 @@ type Props = {
 const SearchOptions = (props:Props) => {
     const { setSorting } =  props;
     const gloomhavenItemSlots: Array<GloomhavenItemSlot> = ['Head', 'Body', 'Legs', 'One Hand', 'Two Hands', 'Small Item'];
-    const { displayAs, discount, enablePartyManagement } = getSpoilerFilter();
-    const { property, search, slots } = getItemViewState();
+    const { displayAs, discount, enablePartyManagement, classesInUse } = getSpoilerFilter();
+    const { property, search, slots, soloClass: filteredSoloClass } = getItemViewState();
     const dispatch = useDispatch();
     const { key: gameType } = useGame();
 
@@ -38,8 +37,20 @@ const SearchOptions = (props:Props) => {
             dispatch(storeFilterSlots({value:undefined, gameType}));
         }
         else
+        {
             dispatch(storeFilterSlots({value, gameType}));
+        }
     }
+
+    const setFilterClass = (soloClass?: SoloClassShorthand) => {
+        if (!soloClass)
+        {
+            dispatch(storeFilterClass({value:undefined, gameType}));    
+            return;
+        }
+        dispatch(storeFilterClass({value:soloClass, gameType}));
+    }
+
 
 
     return (
@@ -112,10 +123,17 @@ const SearchOptions = (props:Props) => {
                         placeholder={'Search...'}
                     />
                 </Form.Group>
-                {enablePartyManagement && <Form.Group inline>
-                    <label>Fliter by Class:</label>
-                    <PartyDropdown/>
-                </Form.Group>}
+                {enablePartyManagement &&<Form.Group inline>
+                    <label>Filter Party Member:</label>
+                    <Form.Radio label={'all'} checked={slots === undefined} onChange={() => setFilterClass(undefined)}/>
+                    {
+                        classesInUse.map(key => (
+                        <Image key={key} src={require(`../../../img/classes/${key}.png`)}
+                            className={'icon' + (key ===  filteredSoloClass? '' : ' disabled')}
+                            onClick={() => setFilterClass(key)}/>
+                        ))}
+                    </Form.Group>
+                }
             </Form>
         </React.Fragment>
     );

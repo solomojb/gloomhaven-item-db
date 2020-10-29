@@ -74,7 +74,11 @@ const initialSpoilerMapState = Object.values(GameType).reduce(
       reducers: {
         storeSpoilerFilter(state, action: PayloadAction<GameTypeAction<SpoilerFilter>>)
         {
-            state[action.payload.gameType] = action.payload.value;
+            const gameState = state[action.payload.gameType]; 
+            if (gameState) { 
+                const newGameState = Object.assign(gameState, action.payload.value);
+                state[action.payload.gameType] = newGameState;
+            }
         },
         storeProsperity(state, action: PayloadAction<GameTypeAction<number>>) {
             const gameState = state[action.payload.gameType]; 

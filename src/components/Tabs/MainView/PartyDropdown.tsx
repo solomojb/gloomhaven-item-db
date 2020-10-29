@@ -6,7 +6,6 @@ import { SoloClassShorthand } from '../../../State/Types';
 import { useGame } from '../../Game/GameProvider';
 import ClassDropdown from './ClassDropdown';
 
-
 const PartyDropdown = () => {
     const {key:gameType} = useGame();
      const { soloClass: filteredSoloClass } = getItemViewState();

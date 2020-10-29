@@ -12,12 +12,13 @@ const Party = () => {
     const dispatch = useDispatch();
     const { classesInUse } = getSpoilerFilter();
     const toggleClassFilter = (key: SoloClassShorthand) => {
-        if (classesInUse.includes(key)) {
-            classesInUse.splice(classesInUse.indexOf(key), 1);
+        const value = Object.assign([], classesInUse);
+        if (value.includes(key)) {
+            value.splice(value.indexOf(key), 1);
         } else {
-            classesInUse.push(key)
+            value.push(key)
         }
-        dispatch(storeClassesInUse({value:classesInUse, gameType}));
+        dispatch(storeClassesInUse({value, gameType}));
     }
 
     return (
