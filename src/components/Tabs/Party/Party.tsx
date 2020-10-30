@@ -1,8 +1,8 @@
 import React from 'react'
 import { Form, Image } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
-import { SoloClassShorthand } from '../../../State/Types';
-import { getSpoilerFilter, storeClassesInUse } from '../../../State/SpoilerFilter';
+import { PullDownOptions, SoloClassShorthand } from '../../../State/Types';
+import { getSpoilerFilter, storeClassesInUse, storeItem, storeItemsOwnedBy } from '../../../State/SpoilerFilter';
 import { useGame } from '../../Game/GameProvider';
 
 const GloomhavenSoloClassShorthands: Array<SoloClassShorthand> = ['BR', 'TI', 'SW', 'SC', 'CH', 'MT', 'SK', 'QM', 'SU', 'NS', 'PH', 'BE', 'SS', 'DS', 'SB', 'EL', 'BT'];
@@ -10,14 +10,31 @@ const GloomhavenSoloClassShorthands: Array<SoloClassShorthand> = ['BR', 'TI', 'S
 const Party = () => {
     const { key : gameType} = useGame();
     const dispatch = useDispatch();
-    const { classesInUse } = getSpoilerFilter();
+    const { classesInUse, itemsOwnedBy } = getSpoilerFilter();
+
+    const cleanUpItemsOwned = (soloClass:SoloClassShorthand) => {
+        const itemsOwnByCopy = Object.assign({}, itemsOwnedBy);
+        Object.keys(itemsOwnByCopy).forEach( key => {
+            const value:PullDownOptions[] = Object.assign([], itemsOwnByCopy[parseInt(key)]);
+            if (value.includes(soloClass))
+            {
+                value[value.indexOf(soloClass)] = undefined
+                itemsOwnByCopy[parseInt(key)] = value;
+            }
+        })
+        dispatch(storeItemsOwnedBy({value:itemsOwnByCopy, gameType}));
+    }
+
     const toggleClassFilter = (key: SoloClassShorthand) => {
-        const value = Object.assign([], classesInUse);
-        if (value.includes(key)) {
-            value.splice(value.indexOf(key), 1);
+        const classesInUseCopy = Object.assign([], classesInUse);
+        if (classesInUseCopy.includes(key)) {
+            classesInUseCopy.splice(classesInUseCopy.indexOf(key), 1);
+            // We just removed the class, we need to find the class in the itemsOwnedBy and remove them there as well.
+            cleanUpItemsOwned(key);
         } else {
-            value.push(key)
+            classesInUseCopy.push(key)
         }
+        const value = GloomhavenSoloClassShorthands.filter( soloClass => classesInUseCopy.includes(soloClass));
         dispatch(storeClassesInUse({value, gameType}));
     }
 

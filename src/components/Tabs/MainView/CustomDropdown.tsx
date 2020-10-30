@@ -23,18 +23,8 @@ const CustomDropdown = (props:Props) => {
 
       const newItemsInUse = {...itemsOwnedBy};
       let itemClasses:PullDownOptions[] = Object.assign([], newItemsInUse[item.id]);
-      if (soloClass) {
-        itemClasses[index] = soloClass;
-      } else {
-        itemClasses.splice(index, 1);
-      }
-      if (itemClasses.length === 0)
-      {
-        delete newItemsInUse[item.id];
-      }
-      else {
-        newItemsInUse[item.id] = itemClasses;
-      }
+      itemClasses[index] = soloClass;
+      newItemsInUse[item.id] = itemClasses;
       dispatch(storeItemsOwnedBy({value:newItemsInUse, gameType}));
   }
 
