@@ -35,7 +35,7 @@ class GHGameData extends BaseGameData  {
 
         const spoilerFiterString = localStorage.getItem(storageKey);
         if (spoilerFiterString){
-            const spoilterFilter = JSON.parse(spoilerFiterString) as SpoilerFilter;
+            const spoilterFilter = JSON.parse(spoilerFiterString);
             if (spoilterFilter && spoilterFilter.itemsInUse) {
                 if (!spoilterFilter.itemsOwnedBy)
                 {
@@ -60,7 +60,7 @@ class GHGameData extends BaseGameData  {
                         }
                     }
                 })
-                spoilterFilter.itemsInUse = [];
+                delete spoilterFilter.itemsInUse;
                 localStorage.setItem(storageKey, JSON.stringify(spoilterFilter));
             }
         }

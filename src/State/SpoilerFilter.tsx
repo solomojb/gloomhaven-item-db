@@ -8,9 +8,6 @@ import { useSelector } from "react-redux";
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { GameTypeAction } from "./GameTypeAction";
 
-export type ItemsInUse = {
-    [key:number]: number;
-  };
 
   export type ItemsOwnedBy = {
     [key:number] : Array<PullDownOptions>
@@ -21,14 +18,12 @@ export interface SpoilerFilter {
     all: boolean
     prosperity: number
     item: Array<number>
-    itemsInUse: ItemsInUse;
     itemsOwnedBy: ItemsOwnedBy;
     classesInUse: Array<SoloClassShorthand>
     soloClass: Array<SoloClassShorthand>
     discount: number
     displayAs: ItemViewDisplayType
     enableStoreStockManagement: boolean
-    enablePartyManagement: boolean
     lockSpoilerPanel: boolean
     scenarioCompleted: Array<number>
 }
@@ -44,14 +39,12 @@ const initialSpoilerFilterState:SpoilerFilter = {
     all: false,
     prosperity: 1,
     item: [],
-    itemsInUse: {},
     itemsOwnedBy: {},
     classesInUse: [],
     soloClass: [],
     discount: 0,
     displayAs: 'list',
     enableStoreStockManagement: false,
-    enablePartyManagement: false,
     lockSpoilerPanel: false,
     scenarioCompleted: [],
 };
@@ -104,12 +97,6 @@ const initialSpoilerMapState = Object.values(GameType).reduce(
                 gameState.item = action.payload.value;
             } 
         },
-        storeItemsInUse(state, action: PayloadAction<GameTypeAction<ItemsInUse>>) {
-            const gameState = state[action.payload.gameType]; 
-            if (gameState) {
-                gameState.itemsInUse = action.payload.value;
-            } 
-        },
         storeAll(state, action: PayloadAction<GameTypeAction<boolean>>) {
             const gameState = state[action.payload.gameType]; 
             if (gameState) {
@@ -120,12 +107,6 @@ const initialSpoilerMapState = Object.values(GameType).reduce(
             const gameState = state[action.payload.gameType]; 
             if (gameState) {
                 gameState.enableStoreStockManagement = action.payload.value;
-            } 
-        },        
-        storeEnablePartyManagement(state, action: PayloadAction<GameTypeAction<boolean>>) {
-            const gameState = state[action.payload.gameType]; 
-            if (gameState) {
-                gameState.enablePartyManagement = action.payload.value;
             } 
         },        
         storeDisplayAs(state, action: PayloadAction<GameTypeAction<ItemViewDisplayType>>) {
@@ -221,6 +202,6 @@ export const spoilerFilterSelector = createSelector(
 }
 
 
-export const { storeEnablePartyManagement, storeItemsOwnedBy, storeClassesInUse, storeAll, storeItem, storeItemsInUse, storeEnableStoreStockManagement, storeDiscount, storeDisplayAs, storeScenarioCompleted, storeSoloClass, storeProsperity, storeSpoilerFilter} = spoilerSlice.actions;
+export const { storeItemsOwnedBy, storeClassesInUse, storeAll, storeItem, storeEnableStoreStockManagement, storeDiscount, storeDisplayAs, storeScenarioCompleted, storeSoloClass, storeProsperity, storeSpoilerFilter} = spoilerSlice.actions;
 
 export default spoilerSlice.reducer;

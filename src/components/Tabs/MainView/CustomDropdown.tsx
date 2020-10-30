@@ -16,7 +16,7 @@ const CustomDropdown = (props:Props) => {
     const {index, item, className} = props;
 
     const {key: gameType} = useGame();
-     const { itemsInUse, itemsOwnedBy, classesInUse } = getSpoilerFilter();
+     const { itemsOwnedBy, classesInUse, lockSpoilerPanel } = getSpoilerFilter();
      const dispatch = useDispatch();
 
     const toggleItemsInUse = (soloClass: PullDownOptions | undefined) => {
@@ -47,17 +47,14 @@ const CustomDropdown = (props:Props) => {
     }
   
     const getInitialClass  = (): PullDownOptions => {
-      if (!!(itemsInUse[item.id] & Math.pow(2, index)))
-      {
-        return "InUse";
-      }
       const itemClasses = itemsOwnedBy[item.id] || [];
       const initClass = itemClasses[index] ;
-      return initClass || "None";
+      return initClass || undefined;
     };
 
     return (
-      <ClassDropdown 
+      <ClassDropdown
+        disabled={lockSpoilerPanel}
         customClass={className}
         initialClass={getInitialClass()}
         filter={filterClasses}

@@ -24,7 +24,7 @@ const GHIcon = (props:IconProps) => {
 
 const ItemTable = (props:Props) => {
     const {items, setSorting} = props;
-    const { enableStoreStockManagement, discount, enablePartyManagement } = getSpoilerFilter();
+    const { enableStoreStockManagement, discount } = getSpoilerFilter();
     const { property, direction } = getItemViewState();
 
     const renderSummon = (item: GloomhavenItem) => {
@@ -53,7 +53,7 @@ const ItemTable = (props:Props) => {
                         <Table.HeaderCell className={'text-col'}>Effect</Table.HeaderCell>
                         <Table.HeaderCell className={'source-col'}>Source</Table.HeaderCell>
                         <Table.HeaderCell
-                            className={'store-inventory-col'}>{(enableStoreStockManagement || enablePartyManagement) ? 'In Use' : 'Stock'}</Table.HeaderCell>
+                            className={'store-inventory-col'}>{(enableStoreStockManagement) ? 'In Use' : 'Stock'}</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>

@@ -13,7 +13,7 @@ import Party from '../Party/Party';
 
 const MainView = () => {
     const { localStorageKey, convertSavedData, key:gameType} = useGame();
-    const { all, lockSpoilerPanel, enablePartyManagement} = getSpoilerFilter();
+    const { all, lockSpoilerPanel, enableStoreStockManagement} = getSpoilerFilter();
     const dispatch = useDispatch();
     const items = useItems();
     const [importedSpoilerFilters, setImportedSpoilerFilters] = useState<SpoilerMap|undefined>(undefined);
@@ -71,7 +71,7 @@ const MainView = () => {
         panes.push({ menuItem: 'Item List',                render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<ItemList items={items}/>}</Tab.Pane> },
                    { menuItem: 'Spoiler Configuration',    render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<SpoilerFilters/>}</Tab.Pane>},
                     { menuItem: 'Share',                    render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<Share/>}</Tab.Pane>});
-        if (enablePartyManagement) {
+        if (enableStoreStockManagement) {
             panes.push({ menuItem: 'Party',                    render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<Party/>}</Tab.Pane>});
         }
     }

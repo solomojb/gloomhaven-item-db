@@ -14,7 +14,7 @@ type Props = {
 const SearchOptions = (props:Props) => {
     const { setSorting } =  props;
     const gloomhavenItemSlots: Array<GloomhavenItemSlot> = ['Head', 'Body', 'Legs', 'One Hand', 'Two Hands', 'Small Item'];
-    const { displayAs, discount, enablePartyManagement, classesInUse } = getSpoilerFilter();
+    const { displayAs, discount, enableStoreStockManagement, classesInUse } = getSpoilerFilter();
     const { property, search, slots, ownerFilter } = getItemViewState();
     const dispatch = useDispatch();
     const { key: gameType } = useGame();
@@ -123,7 +123,7 @@ const SearchOptions = (props:Props) => {
                         placeholder={'Search...'}
                     />
                 </Form.Group>
-                {enablePartyManagement && <Form.Group inline>
+                {enableStoreStockManagement &&  classesInUse.length > 0 && <Form.Group inline>
                     <label>Filter Party Member:</label>
                     <Form.Radio label={'all'} checked={ownerFilter === undefined} onChange={() => setFilterClass(undefined)}/>
                     {

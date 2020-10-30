@@ -10,10 +10,11 @@ type Props  = {
   initialClass?: PullDownOptions;
   onChange?: (option:PullDownOptions | undefined) => void;
   placeholder?: string;
+  disabled?:boolean;
 }
 
 const ClassDropdown = (props:Props) => {
-    const {filter, customClass, initialClass, onChange, placeholder} = props;
+    const {disabled, filter, customClass, initialClass, onChange, placeholder} = props;
 
     const [selectedClass, setSelectedClass] = useState<PullDownOptions| undefined>(initialClass);
 
@@ -61,6 +62,7 @@ const ClassDropdown = (props:Props) => {
     };
 
     return <Dropdown
+      disabled={disabled}
       className={customClass}
       trigger={trigger}
       pointing='top left'
