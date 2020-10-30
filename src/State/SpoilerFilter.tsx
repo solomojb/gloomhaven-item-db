@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { SoloClassShorthand, ItemViewDisplayType } from "./Types";
+import { SoloClassShorthand, ItemViewDisplayType, PullDownOptions } from "./Types";
 import { RootState } from "./Reducer";
 import memoize from 'lodash.memoize'
 import { GameType } from "../games";
@@ -12,8 +12,8 @@ export type ItemsInUse = {
     [key:number]: number;
   };
 
-  export type ItemInUseClasses = {
-    [key:number] : Array<SoloClassShorthand>
+  export type ItemsOwnedBy = {
+    [key:number] : Array<PullDownOptions>
   }
 
 
@@ -22,7 +22,7 @@ export interface SpoilerFilter {
     prosperity: number
     item: Array<number>
     itemsInUse: ItemsInUse;
-    itemsInUseClasses: ItemInUseClasses;
+    itemsOwnedBy: ItemsOwnedBy;
     classesInUse: Array<SoloClassShorthand>
     soloClass: Array<SoloClassShorthand>
     discount: number
@@ -45,7 +45,7 @@ const initialSpoilerFilterState:SpoilerFilter = {
     prosperity: 1,
     item: [],
     itemsInUse: {},
-    itemsInUseClasses: {},
+    itemsOwnedBy: {},
     classesInUse: [],
     soloClass: [],
     discount: 0,
@@ -146,10 +146,10 @@ const initialSpoilerMapState = Object.values(GameType).reduce(
                 gameState.classesInUse = action.payload.value;
             } 
         },
-        storeItemsInUseClasses(state, action:PayloadAction<GameTypeAction<ItemInUseClasses>>) {
+        storeItemsOwnedBy(state, action:PayloadAction<GameTypeAction<ItemsOwnedBy>>) {
             const gameState = state[action.payload.gameType]; 
             if (gameState) {
-                gameState.itemsInUseClasses = action.payload.value;
+                gameState.itemsOwnedBy = action.payload.value;
             } 
         }
       }
@@ -221,6 +221,6 @@ export const spoilerFilterSelector = createSelector(
 }
 
 
-export const { storeEnablePartyManagement, storeItemsInUseClasses, storeClassesInUse, storeAll, storeItem, storeItemsInUse, storeEnableStoreStockManagement, storeDiscount, storeDisplayAs, storeScenarioCompleted, storeSoloClass, storeProsperity, storeSpoilerFilter} = spoilerSlice.actions;
+export const { storeEnablePartyManagement, storeItemsOwnedBy, storeClassesInUse, storeAll, storeItem, storeItemsInUse, storeEnableStoreStockManagement, storeDiscount, storeDisplayAs, storeScenarioCompleted, storeSoloClass, storeProsperity, storeSpoilerFilter} = spoilerSlice.actions;
 
 export default spoilerSlice.reducer;

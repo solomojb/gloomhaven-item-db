@@ -7,6 +7,7 @@ export type SortProperty = 'id' | 'slot' | 'cost' | 'name' | 'use';
 
 export type ItemViewDisplayType = 'list' | 'images';
 
+export type PullDownOptions = 'InUse' | SoloClassShorthand;
 export type SoloClassShorthand = 'BR' | 'TI' | 'SW' | 'SC' | 'CH' | 'MT' | 'SK' | 'QM' | 'SU' | 'NS' | 'PH' | 'BE' | 'SS' | 'DS' | 'SB' | 'EL' | 'BT'| 'DR';
 
 export type GloomhavenItemSlot = 'Head' | 'Body' | 'Legs' | 'One Hand' | 'Two Hands' | 'Small Item';

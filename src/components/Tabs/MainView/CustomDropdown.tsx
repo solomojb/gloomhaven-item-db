@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { getSpoilerFilter, storeItemsInUseClasses } from '../../../State/SpoilerFilter';
-import { SoloClassShorthand } from '../../../State/Types';
+import { getSpoilerFilter, storeItemsOwnedBy } from '../../../State/SpoilerFilter';
+import { PullDownOptions, SoloClassShorthand } from '../../../State/Types';
 import ClassDropdown from './ClassDropdown';
 import { useGame } from '../../Game/GameProvider';
 
@@ -16,42 +16,44 @@ const CustomDropdown = (props:Props) => {
     const {index, item, className} = props;
 
     const {key: gameType} = useGame();
-     const { itemsInUseClasses, classesInUse } = getSpoilerFilter();
+     const { itemsInUse, itemsOwnedBy, classesInUse } = getSpoilerFilter();
      const dispatch = useDispatch();
 
-    const toggleItemsInUse = (soloClass: SoloClassShorthand | undefined) => {
+    const toggleItemsInUse = (soloClass: PullDownOptions | undefined) => {
 
-      const newItemsInUse = {...itemsInUseClasses};
-      const itemClasses = newItemsInUse[item.id] || [];
+      const newItemsInUse = {...itemsOwnedBy};
+      let itemClasses:PullDownOptions[] = Object.assign([], newItemsInUse[item.id]);
       if (soloClass) {
-        const classIndex = itemClasses.indexOf(soloClass);
-        // We've already selected this for another slot
-        if (classIndex !== -1 && classIndex !== index)
-        {
-            console.log("Can't change", item.id, soloClass);
-            return;
-        }
-        // We don't already have this,
         itemClasses[index] = soloClass;
       } else {
-        delete itemClasses[index];
+        itemClasses.splice(index, 1);
       }
-      newItemsInUse[item.id] = itemClasses;
-      dispatch(storeItemsInUseClasses({value:newItemsInUse, gameType}));
+      if (itemClasses.length === 0)
+      {
+        delete newItemsInUse[item.id];
+      }
+      else {
+        newItemsInUse[item.id] = itemClasses;
+      }
+      dispatch(storeItemsOwnedBy({value:newItemsInUse, gameType}));
   }
 
     const filterClasses = (soloClass:SoloClassShorthand) => {
       if (!classesInUse.includes(soloClass)) {
         return false;
       }
-      const itemClasses = itemsInUseClasses[item.id] || [];
+      const itemClasses = itemsOwnedBy[item.id] || [];
       return !itemClasses.includes(soloClass)
     }
   
-    const getInitialClass  = (): SoloClassShorthand => {
-      const itemClasses = itemsInUseClasses[item.id] || [];
-      const initClass = itemClasses[index];
-      return initClass;
+    const getInitialClass  = (): PullDownOptions => {
+      if (!!(itemsInUse[item.id] & Math.pow(2, index)))
+      {
+        return "InUse";
+      }
+      const itemClasses = itemsOwnedBy[item.id] || [];
+      const initClass = itemClasses[index] ;
+      return initClass || "None";
     };
 
     return (

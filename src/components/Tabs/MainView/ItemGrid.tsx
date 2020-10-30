@@ -9,11 +9,6 @@ type Props = {
 
 const ItemGrid = (props:Props) => {
     const {items} = props;
-    if (items.length === 0) {
-        return <Message negative>
-            No items found matching your filters and/or search criteria
-        </Message>
-    }
 
     return (
         <>

@@ -32,6 +32,38 @@ class GHGameData extends BaseGameData  {
             localStorage.removeItem(oldFilterLocalStorageKey);
             localStorage.setItem(storageKey, loadedSpoilerFilterString);
         }
+
+        const spoilerFiterString = localStorage.getItem(storageKey);
+        if (spoilerFiterString){
+            const spoilterFilter = JSON.parse(spoilerFiterString) as SpoilerFilter;
+            if (spoilterFilter && spoilterFilter.itemsInUse) {
+                if (!spoilterFilter.itemsOwnedBy)
+                {
+                    spoilterFilter.itemsOwnedBy = [];
+                }
+                Object.keys(spoilterFilter.itemsInUse).forEach( index => {
+                    const key = parseInt(index);
+                    const value = spoilterFilter.itemsInUse[parseInt(index)]
+                    if (value)
+                    {
+                        if (!spoilterFilter.itemsOwnedBy[key])
+                        {
+                            spoilterFilter.itemsOwnedBy[key] = [];
+                        }
+
+                        for(let i = 0; i < 4; i++)
+                        {
+                            const isSet = value & Math.pow(2, i);
+                            if (isSet) {
+                                spoilterFilter.itemsOwnedBy[key][i] ="InUse";
+                            }
+                        }
+                    }
+                })
+                spoilterFilter.itemsInUse = [];
+                localStorage.setItem(storageKey, JSON.stringify(spoilterFilter));
+            }
+        }
     }
     getItemSubfolder(item:GloomhavenItem) {
         if (item.id >= 152 && item.id <= 165) {

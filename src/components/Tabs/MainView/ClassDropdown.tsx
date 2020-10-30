@@ -1,40 +1,50 @@
 import React, { useState } from 'react'
-import { Image, Dropdown, Icon } from 'semantic-ui-react';
-import { SoloClassShorthand } from '../../../State/Types';
+import { Image, Dropdown, Label } from 'semantic-ui-react';
+import { PullDownOptions, SoloClassShorthand } from '../../../State/Types';
 
-const GloomhavenSoloClassShorthands: Array<SoloClassShorthand> = ['BR', 'TI', 'SW', 'SC', 'CH', 'MT', 'SK', 'QM', 'SU', 'NS', 'PH', 'BE', 'SS', 'DS', 'SB', 'EL', 'BT'];
+const GloomhavenSoloClassShorthands: Array<string> = ['BR', 'TI', 'SW', 'SC', 'CH', 'MT', 'SK', 'QM', 'SU', 'NS', 'PH', 'BE', 'SS', 'DS', 'SB', 'EL', 'BT'];
 
 type Props  = {
   filter?: (soloClass:SoloClassShorthand) => boolean;
   customClass?:string;
-  initialClass?: SoloClassShorthand;
-  onChange?: (option:SoloClassShorthand | undefined) => void;
+  initialClass?: PullDownOptions;
+  onChange?: (option:PullDownOptions | undefined) => void;
   placeholder?: string;
 }
 
 const ClassDropdown = (props:Props) => {
     const {filter, customClass, initialClass, onChange, placeholder} = props;
 
-    const [selectedClass, setSelectedClass] = useState<SoloClassShorthand| undefined>(initialClass);
+    const [selectedClass, setSelectedClass] = useState<PullDownOptions| undefined>(initialClass);
 
     const getClassList = (applyFilter:boolean) => {
       let classList = GloomhavenSoloClassShorthands;
       if (filter && applyFilter) {
-        classList = classList.filter(filter);
+        classList = classList.filter((soloClass) => filter(soloClass as SoloClassShorthand));
       }
+      classList.unshift('InUse');
       return classList;
     }
 
-    const selectOption = (soloClass:SoloClassShorthand | undefined) => {
+    const selectOption = (soloClass:PullDownOptions | undefined) => {
        setSelectedClass(soloClass);
       if (onChange)
         onChange(soloClass)
     };
 
-    const createClassImage = (soloClass:SoloClassShorthand| undefined) => {
-      return soloClass ?
-        <Image  key={soloClass} src={require(`../../../img/classes/${soloClass}.png`)} className={'soloClass'}/> : 
-        <Image  key={soloClass} src={require(`../../../img/icons/element/use.png`)} className={'soloClass'}/>
+    const createClassImage = (soloClass:PullDownOptions| undefined) => {
+      if (GloomhavenSoloClassShorthands.includes(soloClass as SoloClassShorthand))
+      {
+        return <Image key={soloClass} src={require(`../../../img/classes/${soloClass}.png`)} className={'soloClass'}/>;
+      }
+      else if (soloClass === 'InUse')
+      {
+        return <Image  key={soloClass} src={require(`../../../img/icons/equipment_slot/small.png`)} className={'soloClass'}/>
+      }
+      else // Is it undefined?
+      {
+        return <Image  key={soloClass} src={require(`../../../img/icons/element/use.png`)} className={'soloClass'}/>
+      }
     }
 
     const trigger = (
@@ -43,12 +53,9 @@ const ClassDropdown = (props:Props) => {
 
     const options = () => {
       const opts:any = [];
-      if (selectedClass) {
-        opts.push({ onClick:() => {selectOption(undefined)}, key:'dont', image: createClassImage(undefined)});
-      }
-      
-      return opts.concat(getClassList(true).map((soloClass:SoloClassShorthand) => {
-        return { onClick:() => {selectOption(soloClass)}, key: soloClass, image: createClassImage(soloClass)    }
+      opts.push({ onClick:() => {selectOption(undefined)}, key:'dont', image: createClassImage(undefined)});
+      return opts.concat(getClassList(true).map((soloClass:String) => {
+        return { onClick:() => {selectOption(soloClass as PullDownOptions)}, key: soloClass, image: createClassImage(soloClass as PullDownOptions)    }
       }));
 
     };
