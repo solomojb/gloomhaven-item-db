@@ -1,4 +1,4 @@
-import { GloomhavenItemSlot, PullDownOptions, SoloClassShorthand, SortDirection, SortProperty } from "./Types";
+import { GloomhavenItemSlot, PullDownOptions, SortDirection, SortProperty } from "./Types";
 import { GameType } from "../games";
 import { createSelector } from "reselect"
 import { RootState } from "./Reducer";

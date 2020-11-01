@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { SoloClassShorthand, ItemViewDisplayType, PullDownOptions } from "./Types";
+import { SoloClassShorthand, ItemViewDisplayType, PullDownOptions, ClassesInUse } from "./Types";
 import { RootState } from "./Reducer";
 import memoize from 'lodash.memoize'
 import { GameType } from "../games";
@@ -19,7 +19,7 @@ export interface SpoilerFilter {
     prosperity: number
     item: Array<number>
     itemsOwnedBy: ItemsOwnedBy;
-    classesInUse: Array<SoloClassShorthand>
+    classesInUse: Array<PullDownOptions>
     soloClass: Array<SoloClassShorthand>
     discount: number
     displayAs: ItemViewDisplayType
@@ -121,7 +121,7 @@ const initialSpoilerMapState = Object.values(GameType).reduce(
                 gameState.discount = action.payload.value;
             } 
         },
-        storeClassesInUse(state, action:PayloadAction<GameTypeAction<Array<SoloClassShorthand>>>) {
+        storeClassesInUse(state, action:PayloadAction<GameTypeAction<Array<ClassesInUse>>>) {
             const gameState = state[action.payload.gameType]; 
             if (gameState) {
                 gameState.classesInUse = action.payload.value;

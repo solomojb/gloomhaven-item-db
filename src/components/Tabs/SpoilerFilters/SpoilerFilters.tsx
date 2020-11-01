@@ -3,6 +3,7 @@ import { Form, Button, Icon } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { storeEnableStoreStockManagement, storeAll, getSpoilerFilter } from '../../../State/SpoilerFilter';
 import { useGame } from '../../Game/GameProvider';
+import Party from '../Party/Party';
 
 const SpoilerFilters = () => {
     const dispatch = useDispatch();
@@ -34,7 +35,8 @@ const SpoilerFilters = () => {
                         onClick={() => {
                             dispatch(storeEnableStoreStockManagement({value:!enableStoreStockManagement, gameType}));
                         }}/>
-                </Form.Group>
+                    </Form.Group>
+                    {enableStoreStockManagement && <Party/>}
 
                 {spoilerFilter}
     

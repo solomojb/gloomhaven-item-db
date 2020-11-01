@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { storeDisplayAs, storeDiscount, getSpoilerFilter } from '../../../State/SpoilerFilter';
 import { storeFilterSearch, storeFilterSlots, getItemViewState, storeOwnerFilter } from '../../../State/ItemViewState';
 import { getSlotImageSrc } from '../../../helpers';
-import { GloomhavenItemSlot, SoloClassShorthand, SortProperty} from '../../../State/Types';
+import { GloomhavenItemSlot, PullDownOptions, SortProperty} from '../../../State/Types';
 import { useGame } from '../../Game/GameProvider';
 
 type Props = {
@@ -42,7 +42,7 @@ const SearchOptions = (props:Props) => {
         }
     }
 
-    const setFilterClass = (soloClass?: SoloClassShorthand) => {
+    const setFilterClass = (soloClass?: PullDownOptions) => {
         if (!soloClass)
         {
             dispatch(storeOwnerFilter({value:undefined, gameType}));    

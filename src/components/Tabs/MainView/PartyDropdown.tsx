@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 import { getItemViewState, storeOwnerFilter } from '../../../State/ItemViewState';
 import { getSpoilerFilter } from '../../../State/SpoilerFilter';
-import { PullDownOptions, SoloClassShorthand } from '../../../State/Types';
+import { PullDownOptions } from '../../../State/Types';
 import { useGame } from '../../Game/GameProvider';
 import ClassDropdown from './ClassDropdown';
 
@@ -16,7 +16,7 @@ const PartyDropdown = () => {
         dispatch(storeOwnerFilter({value:soloClass, gameType}));
       };
 
-      const filter = (soloClass:SoloClassShorthand) => {
+      const filter = (soloClass:PullDownOptions) => {
         return soloClass !== ownerFilter && classesInUse.includes(soloClass);
       };
  

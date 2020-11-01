@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import { getSpoilerFilter, storeItemsOwnedBy } from '../../../State/SpoilerFilter';
-import { PullDownOptions, SoloClassShorthand } from '../../../State/Types';
+import { PullDownOptions } from '../../../State/Types';
 import ClassDropdown from './ClassDropdown';
 import { useGame } from '../../Game/GameProvider';
 
@@ -28,7 +28,7 @@ const CustomDropdown = (props:Props) => {
       dispatch(storeItemsOwnedBy({value:newItemsInUse, gameType}));
   }
 
-    const filterClasses = (soloClass:SoloClassShorthand) => {
+    const filterClasses = (soloClass:PullDownOptions) => {
       if (!classesInUse.includes(soloClass)) {
         return false;
       }
