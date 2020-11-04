@@ -13,6 +13,11 @@ import { GameTypeAction } from "./GameTypeAction";
     [key:number] : Array<PullDownOptions>
   }
 
+  export type ItemOwnerData = {
+      key:number;
+      value: Array<PullDownOptions>;
+  }
+
 
 export interface SpoilerFilter {
     all: boolean
@@ -127,10 +132,10 @@ const initialSpoilerMapState = Object.values(GameType).reduce(
                 gameState.classesInUse = action.payload.value;
             } 
         },
-        storeItemsOwnedBy(state, action:PayloadAction<GameTypeAction<ItemsOwnedBy>>) {
+        storeItemsOwnedBy(state, action:PayloadAction<GameTypeAction<ItemOwnerData>>) {
             const gameState = state[action.payload.gameType]; 
             if (gameState) {
-                gameState.itemsOwnedBy = action.payload.value;
+                gameState.itemsOwnedBy[action.payload.value.key] = action.payload.value.value;
             } 
         }
       }

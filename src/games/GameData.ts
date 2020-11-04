@@ -13,10 +13,12 @@ export abstract class BaseGameData {
     name: string;
     key: GameType;
     initItems: Array<GloomhavenItem> | undefined;
+    requireCache: Array<NodeRequire>;
     constructor(name:string, key:GameType){
         this.name = name;
         this.key = key;
         this.initItems = undefined;
+        this.requireCache = [];
     }
 
     get initialItems() : Array<GloomhavenItem> {
@@ -71,9 +73,14 @@ export abstract class BaseGameData {
     abstract getItemSubfolder(item:GloomhavenItem): string;
 
     getItemPath(item:GloomhavenItem) {
+        if (this.requireCache[item.id]) {
+            return this.requireCache[item.id];
+        }
         let folder = this.getItemSubfolder(item);
         let name = item.name.toLowerCase().replace(/\s/g, '-').replace(/'/, '');
-        return require(`../../vendor/${this.key}/images/items/${folder}/${name}.png`);
+        const image =  require(`../../vendor/${this.key}/images/items/${folder}/${name}.png`);
+        this.requireCache[item.id] = image;
+        return image;
     }
     
 }

@@ -9,11 +9,10 @@ import useItems  from '../../../hooks/useItems'
 import {useGame } from '../../Game/GameProvider';
 import { GameType } from '../../../games';
 import { LOCAL_STORAGE_PREFIX } from '../../../games/GameData';
-import Party from '../Party/Party';
 
 const MainView = () => {
     const { localStorageKey, convertSavedData, key:gameType} = useGame();
-    const { all, lockSpoilerPanel, enableStoreStockManagement} = getSpoilerFilter();
+    const { all, lockSpoilerPanel} = getSpoilerFilter();
     const dispatch = useDispatch();
     const items = useItems();
     const [importedSpoilerFilters, setImportedSpoilerFilters] = useState<SpoilerMap|undefined>(undefined);

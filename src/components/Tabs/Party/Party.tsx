@@ -19,10 +19,9 @@ const Party = () => {
             if (value.includes(soloClass))
             {
                 value[value.indexOf(soloClass)] = undefined
-                itemsOwnByCopy[parseInt(key)] = value;
+                dispatch(storeItemsOwnedBy({value:{key:parseInt(key), value}, gameType}));
             }
         })
-        dispatch(storeItemsOwnedBy({value:itemsOwnByCopy, gameType}));
     }
 
     const toggleClassFilter = (key: ClassesInUse) => {
