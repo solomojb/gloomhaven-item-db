@@ -18,23 +18,22 @@ const ItemManagement = (props:Props) => {
     const {key: gameType} = useGame();
 
     useEffect( () => {
-        if (!owners)
+        let newOwners:PullDownOptions[] = ["InUse"];
+        newOwners = newOwners.concat(classesInUse);
+        if (owners)
         {
-            return;
-        }
-        const newOwners = Object.assign([], classesInUse);
-        owners.forEach( owner => {
-            if (owner) 
-            {
-                const index = newOwners.indexOf(owner);
-                if (index !== -1) {
-                    newOwners.splice(index, 1);
+            owners.forEach( owner => {
+                if (owner) 
+                {
+                    const index = newOwners.indexOf(owner);
+                    if (index !== -1) {
+                        newOwners.splice(index, 1);
+                    }
                 }
-            }
-        })
-        newOwners.unshift("InUse");
+            })
+        }
         setPossibleOwners(newOwners);
-    }, [owners]);
+    }, [owners, classesInUse]);
 
     if (!enableStoreStockManagement) {
         return <>{item.count}</>
