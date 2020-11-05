@@ -10,7 +10,7 @@ const useItems = (): Array<GloomhavenItem> => {
     const [ filteredItems, setFilteredItems] = useState<GloomhavenItem[]>([]);
     const { isItemShown, initialItems} = useGame();
     const spoilerFilter = getSpoilerFilter();
-    const { all, item:spoilerFilterItem, itemsOwnedBy } = spoilerFilter;
+    const { all, item:spoilerFilterItem, itemsOwnedBy, prosperity, scenarioCompleted } = spoilerFilter;
     const { slots, search, ownerFilter, property, direction } = getItemViewState();
 
     useEffect(() => {
@@ -52,11 +52,15 @@ const useItems = (): Array<GloomhavenItem> => {
     
             return true;
         }
-
-        setFilteredItems(initialItems.filter(isItemFiltered));
-    },[all, slots, search, ownerFilter, spoilerFilterItem])
+        const items = initialItems.filter(isItemFiltered);
+        setFilteredItems(items);
+    },[all, slots, search, ownerFilter, spoilerFilterItem, prosperity, scenarioCompleted])
 
     useEffect(() => {
+        if (filteredItems.length === 0)
+        {
+            return;
+        }
         const compareFunction = (itemA:GloomhavenItem, itemB:GloomhavenItem): number => {
             let value = 0;
             switch (property) {
