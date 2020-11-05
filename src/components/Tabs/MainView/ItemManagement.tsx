@@ -18,8 +18,7 @@ const ItemManagement = (props:Props) => {
     const {key: gameType} = useGame();
 
     useEffect( () => {
-        let newOwners:PullDownOptions[] = ["InUse"];
-        newOwners = newOwners.concat(classesInUse);
+        let newOwners:PullDownOptions[] = Object.assign([], classesInUse);
         if (owners)
         {
             owners.forEach( owner => {
@@ -32,6 +31,7 @@ const ItemManagement = (props:Props) => {
                 }
             })
         }
+        newOwners.unshift("InUse");
         setPossibleOwners(newOwners);
     }, [owners, classesInUse]);
 
