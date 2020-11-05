@@ -46,6 +46,7 @@ const ClassDropdown = (props:Props) => {
     };
 
     return <Dropdown
+      labeled={true}
       disabled={disabled}
       className={customClass}
       trigger={createClassImage(selectedOption)}

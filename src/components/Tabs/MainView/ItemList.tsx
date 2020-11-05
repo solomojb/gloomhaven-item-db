@@ -20,17 +20,18 @@ const ItemList = (props:Props) => {
     const { property, direction } = getItemViewState();
     const dispatch = useDispatch();
 
-        const setSorting = (newProperty: SortProperty) => {
-            let newDirection:SortDirection;
-            if (property === newProperty) {
-                newDirection = direction === SortDirection.ascending ? SortDirection.descending : SortDirection.ascending;
-            } else {
-                newDirection = SortDirection.ascending;
-            }
-
-            dispatch(storeSortingProperty({value:newProperty, gameType}));
-            dispatch(storeSortingDirection({value:newDirection, gameType}));
+    const setSorting = (newProperty: SortProperty) => {
+        console.log("sorting by", newProperty);
+        let newDirection:SortDirection;
+        if (property === newProperty) {
+            newDirection = direction === SortDirection.ascending ? SortDirection.descending : SortDirection.ascending;
+        } else {
+            newDirection = SortDirection.ascending;
         }
+
+        dispatch(storeSortingProperty({value:newProperty, gameType}));
+        dispatch(storeSortingDirection({value:newDirection, gameType}));
+    }
         
     return (
         <>

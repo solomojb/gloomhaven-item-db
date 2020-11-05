@@ -24,7 +24,7 @@ const GHIcon = (props:IconProps) => {
 
 const ItemTable = (props:Props) => {
     const {items, setSorting} = props;
-    const { enableStoreStockManagement, discount } = getSpoilerFilter();
+    const { enableStoreStockManagement, discount, itemsOwnedBy } = getSpoilerFilter();
     const { property, direction } = getItemViewState();
 
     const renderSummon = (item: GloomhavenItem) => {
@@ -83,7 +83,7 @@ const ItemTable = (props:Props) => {
                                     {item.source.split("\n").map(s => <React.Fragment key={s}><span dangerouslySetInnerHTML={{__html: s}}/><br/></React.Fragment>)}
                                 </Table.Cell>
                                 <Table.Cell className={'store-inventory-col'} textAlign={'right'}>
-                                    <ItemManagement item={item}/>
+                                    <ItemManagement item={item} owners={itemsOwnedBy[item.id]}/>
                                 </Table.Cell>
                             </Table.Row>
                         );

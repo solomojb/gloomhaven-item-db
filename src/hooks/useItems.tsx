@@ -2,46 +2,62 @@ import { GloomhavenItemSlot, GloomhavenItem, SortDirection } from "../State/Type
 import { useGame } from "../components/Game/GameProvider"
 import { getSpoilerFilter } from "../State/SpoilerFilter";
 import { getItemViewState } from "../State/ItemViewState";
+import { useEffect, useState } from "react";
 
 const gloomhavenItemSlots: Array<GloomhavenItemSlot> = ['Head', 'Body', 'Legs', 'One Hand', 'Two Hands', 'Small Item'];
 
 const useItems = (): Array<GloomhavenItem> => {
-
+    const [ filteredItems, setFilteredItems] = useState<GloomhavenItem[]>([]);
     const { isItemShown, initialItems} = useGame();
     const spoilerFilter = getSpoilerFilter();
-    const { all, item: spoilerFilterItem, itemsOwnedBy } = spoilerFilter;
-    const { property, direction, slots, search, ownerFilter } = getItemViewState();
+    const { all, item:spoilerFilterItem, itemsOwnedBy } = spoilerFilter;
+    const { slots, search, ownerFilter, property, direction } = getItemViewState();
 
-    const getFilteredItems = () => {
-        const spoilerFiltered = all ? initialItems : initialItems.filter(item => {
-            if (isItemShown(item, spoilerFilter)) return true;
-            return spoilerFilterItem.includes(item.id);
-        });
-        return spoilerFiltered.filter(item => {
-            let hit = true;
-            if (slots) { 
-                hit = slots.includes(item.slot);
+    useEffect(() => {
+        const isItemFiltered = (item:GloomhavenItem) : boolean => {
+            if (!all)
+            {
+                if (!isItemShown(item, spoilerFilter)) {
+                    if (!spoilerFilterItem.includes(item.id))
+                    {
+                        return false;
+                    }
+                }
             }
-            if (search.length > 2 && hit) { 
-                hit = (!!item.name.match(new RegExp(search, 'i')) || !!item.desc.match(new RegExp(search, 'i')));
+    
+            if (slots) {
+                if (!slots.includes(item.slot))
+                {
+                    return false;
+                }
             }
-            if (ownerFilter && hit) {
+    
+            if (search.length > 2 )
+            {
+                const nameMatch = item.name.match(new RegExp(search, 'i'));
+                const descMatch = item.desc.match(new RegExp(search, 'i'));
+                if (!nameMatch && !descMatch)
+                {
+                    return false;
+                }
+            }
+    
+            if (ownerFilter) {
                 const classes = itemsOwnedBy[item.id];
-                if (classes) {
-                    hit = classes.includes(ownerFilter);
+                if (!classes || !classes.includes(ownerFilter))
+                {
+                    return false;
                 }
-                else {
-                    hit = false;
-                }
-
             }
-            return hit;
-        });
-    }
+    
+            return true;
+        }
 
-    const getSortedAndFilteredItems = () => {
-        const items = getFilteredItems();
-        return (items.sort((itemA, itemB) => {
+        setFilteredItems(initialItems.filter(isItemFiltered));
+    },[all, slots, search, ownerFilter, spoilerFilterItem])
+
+    useEffect(() => {
+        const compareFunction = (itemA:GloomhavenItem, itemB:GloomhavenItem): number => {
             let value = 0;
             switch (property) {
                 case "name":
@@ -55,8 +71,8 @@ const useItems = (): Array<GloomhavenItem> => {
                     }
                     break;
                 case "cost":
-                    if (itemA["cost"] === itemB["cost"]) return 0;
-                    value = itemA["cost"] > itemB["cost"] ? 1 : -1;
+                    if (itemA.cost === itemB.cost) return 0;
+                    value = itemA.cost > itemB.cost ? 1 : -1;
                     break;
                 case "id":
                     if (itemA["id"] === itemB["id"]) return 0;
@@ -69,11 +85,16 @@ const useItems = (): Array<GloomhavenItem> => {
                     value = itemAuse.localeCompare(itemBuse);
                     break;
             }
-            return direction === SortDirection.ascending ? value : value * -1;
-        }));
-    }
+            const val = direction === SortDirection.ascending ? value : value * -1;
+            return val;
+        }
 
-    return getSortedAndFilteredItems();
+        const sortedItems = Object.assign([], filteredItems);
+        sortedItems.sort(compareFunction);
+        setFilteredItems(sortedItems);
+    }, [property, direction])
+
+    return filteredItems;
 }
 
 export default useItems;

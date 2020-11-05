@@ -2,9 +2,9 @@ import React from 'react'
 import { Form, Button, Input, Image } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
 import { storeDisplayAs, storeDiscount, getSpoilerFilter } from '../../../State/SpoilerFilter';
-import { storeFilterSearch, storeFilterSlots, getItemViewState, storeOwnerFilter } from '../../../State/ItemViewState';
+import { storeFilterSearch, storeFilterSlots, getItemViewState, storeOwnerFilter, storeSortingDirection } from '../../../State/ItemViewState';
 import { getSlotImageSrc } from '../../../helpers';
-import { GloomhavenItemSlot, PullDownOptions, SortProperty} from '../../../State/Types';
+import { GloomhavenItemSlot, PullDownOptions, SortDirection, SortProperty} from '../../../State/Types';
 import { useGame } from '../../Game/GameProvider';
 
 type Props = {
@@ -15,7 +15,7 @@ const SearchOptions = (props:Props) => {
     const { setSorting } =  props;
     const gloomhavenItemSlots: Array<GloomhavenItemSlot> = ['Head', 'Body', 'Legs', 'One Hand', 'Two Hands', 'Small Item'];
     const { displayAs, discount, enableStoreStockManagement, classesInUse } = getSpoilerFilter();
-    const { property, search, slots, ownerFilter } = getItemViewState();
+    const { property, search, slots, ownerFilter, direction } = getItemViewState();
     const dispatch = useDispatch();
     const { key: gameType } = useGame();
 
@@ -25,33 +25,29 @@ const SearchOptions = (props:Props) => {
             dispatch(storeFilterSlots({value:undefined, gameType}));    
             return;
         }
-        let value = Object.assign([], slots);
+        let value:GloomhavenItemSlot[]|undefined = Object.assign([], slots);
         const index = value.indexOf(slot);
         if (index !== -1) {
             value.splice(index, 1);
+            if (value.length === 0)
+            {
+                value = undefined;
+            }
         } else {
             value.push(slot);
         }
-        if (value.length === 0)
-        {
-            dispatch(storeFilterSlots({value:undefined, gameType}));
-        }
-        else
-        {
-            dispatch(storeFilterSlots({value, gameType}));
-        }
+        dispatch(storeFilterSlots({value, gameType}));
     }
 
-    const setFilterClass = (soloClass?: PullDownOptions) => {
-        if (!soloClass)
+    const setFilterClass = (newOwner?: PullDownOptions) => {
+        if (!newOwner)
         {
             dispatch(storeOwnerFilter({value:undefined, gameType}));    
             return;
         }
-        dispatch(storeOwnerFilter({value:soloClass, gameType}));
+        const value = ownerFilter === newOwner ? undefined : newOwner; 
+        dispatch(storeOwnerFilter({value, gameType}));
     }
-
-
 
     return (
         <React.Fragment>
@@ -103,6 +99,16 @@ const SearchOptions = (props:Props) => {
                         ]}
                         onChange={(obj, e) => setSorting(e.value as SortProperty)}
                     />
+                    <Button.Group>
+                        <Button color={direction === SortDirection.ascending ? 'blue' : undefined} onClick={() => {
+                                dispatch(storeSortingDirection({value:SortDirection.ascending, gameType}));
+                            }}>Ascending</Button>
+                        <Button.Or/>
+                        <Button color={direction === SortDirection.descending ? 'blue' : undefined} onClick={() => {
+                                dispatch(storeSortingDirection({value:SortDirection.descending, gameType}));
+                            }}>Descending</Button>
+                    </Button.Group>
+
                 </Form.Group>}
                 <Form.Group inline>
                     <label>Filter Slot:</label>

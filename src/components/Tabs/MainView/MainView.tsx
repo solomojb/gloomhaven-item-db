@@ -5,16 +5,17 @@ import { SpoilerFilter, storeSpoilerFilter, restoreFromLocalStorage, getSpoilerF
 import ItemList from './ItemList';
 import SpoilerFilters from '../SpoilerFilters/SpoilerFilters';
 import Share from '../Share';
-import useItems  from '../../../hooks/useItems'
 import {useGame } from '../../Game/GameProvider';
 import { GameType } from '../../../games';
 import { LOCAL_STORAGE_PREFIX } from '../../../games/GameData';
+import useItems from '../../../hooks/useItems';
 
 const MainView = () => {
     const { localStorageKey, convertSavedData, key:gameType} = useGame();
-    const { all, lockSpoilerPanel} = getSpoilerFilter();
+    const spoilerFilter = getSpoilerFilter();
+    const { all, lockSpoilerPanel} = spoilerFilter;
     const dispatch = useDispatch();
-    const items = useItems();
+    const filteredItems = useItems();
     const [importedSpoilerFilters, setImportedSpoilerFilters] = useState<SpoilerMap|undefined>(undefined);
     const loadGamesFromStorage = () => {
         Object.values(GameType).forEach( gt => {
@@ -67,11 +68,11 @@ const MainView = () => {
     let panes = [];
     if (!lockSpoilerPanel)
     {
-        panes.push({ menuItem: 'Item List',                render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<ItemList items={items}/>}</Tab.Pane> },
-                   { menuItem: 'Spoiler Configuration',    render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<SpoilerFilters/>}</Tab.Pane>},
+        panes.push({ menuItem: 'Item List',                render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<ItemList items={filteredItems}/>}</Tab.Pane> },
+                    { menuItem: 'Spoiler Configuration',    render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<SpoilerFilters/>}</Tab.Pane>},
                     { menuItem: 'Share',                    render: () => <Tab.Pane className={all ? 'spoiler' : ''}>{<Share/>}</Tab.Pane>});
     }
-    
+
     return (
         <>
             <Modal basic size='small' open={importedSpoilerFilters !== undefined}>

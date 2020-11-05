@@ -7,23 +7,21 @@ import ClassDropdown from './ClassDropdown';
 
 type Props = {
     item : GloomhavenItem;
+    owners: PullDownOptions[];
 }
 
 const ItemManagement = (props:Props) => {
-    const {item} = props;
-    const { enableStoreStockManagement, itemsOwnedBy, classesInUse, lockSpoilerPanel } = getSpoilerFilter();
+    const {item, owners} = props;
+    const { enableStoreStockManagement, classesInUse, lockSpoilerPanel } = getSpoilerFilter();
     const [possibleOwners, setPossibleOwners] = useState<PullDownOptions[]>(classesInUse);
-    const owners = itemsOwnedBy[item.id] || [];
     const dispatch = useDispatch();
     const {key: gameType} = useGame();
 
-    if (!enableStoreStockManagement) {
-        return <>{item.count}</>
-    }
-
     useEffect( () => {
         if (!owners)
+        {
             return;
+        }
         const newOwners = Object.assign([], classesInUse);
         owners.forEach( owner => {
             if (owner) 
@@ -36,7 +34,18 @@ const ItemManagement = (props:Props) => {
         })
         newOwners.unshift("InUse");
         setPossibleOwners(newOwners);
-    }, owners);
+    }, [owners]);
+
+    if (!enableStoreStockManagement) {
+        return <>{item.count}</>
+    }
+
+    const getInitialOption = (index:number) => {
+        if (!owners)
+            return undefined;
+
+        return owners[index];
+    }
 
     return (
         <>
@@ -45,7 +54,7 @@ const ItemManagement = (props:Props) => {
                     <ClassDropdown 
                         disabled={lockSpoilerPanel}
                         optionsList={possibleOwners} 
-                        initialOption={owners[index]}
+                        initialOption={getInitialOption(index)}
                         customClass={'itemmanagement i' + index} 
                         changeOption={ option => {
                             let itemClasses:PullDownOptions[] = Object.assign([], owners);
