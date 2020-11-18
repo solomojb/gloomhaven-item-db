@@ -1,6 +1,6 @@
 import React from 'react'
 import { GloomhavenItem, SortProperty } from '../../../State/Types'
-import {  Table, Popup, Icon, Image } from 'semantic-ui-react';
+import {  Table, Popup, Icon, Image, Segment } from 'semantic-ui-react';
 import ItemManagement from './ItemManagement';
 import { Helpers, getSlotImageSrc } from '../../../helpers';
 import { getSpoilerFilter } from '../../../State/SpoilerFilter';
@@ -25,7 +25,7 @@ const GHIcon = (props:IconProps) => {
 const ItemTable = (props:Props) => {
     const {items, setSorting} = props;
     const { enableStoreStockManagement, discount, itemsOwnedBy } = getSpoilerFilter();
-    const { property, direction } = getItemViewState();
+    const { property, direction, currentPage } = getItemViewState();
 
     const renderSummon = (item: GloomhavenItem) => {
         return item.summon === undefined ? null : (
@@ -41,7 +41,7 @@ const ItemTable = (props:Props) => {
     }
 
     return (
-        <>
+        <Segment style={{overflow: 'auto', maxHeight: 700 }}>
             <Table basic sortable celled className={'items-table'} unstackable>
                 <Table.Header>
                     <Table.Row>
@@ -90,7 +90,7 @@ const ItemTable = (props:Props) => {
                     })}
                 </Table.Body>
             </Table>
-        </>                
+        </Segment>                
     );
 }
 

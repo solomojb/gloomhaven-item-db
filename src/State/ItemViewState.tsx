@@ -14,6 +14,7 @@ export interface ItemViewState {
     ownerFilter?: PullDownOptions;
     direction: SortDirection;
     property: SortProperty;
+    currentPage: number;
 }
 
 const initialItemViewState : ItemViewState = {
@@ -21,7 +22,8 @@ const initialItemViewState : ItemViewState = {
     search: '',
     ownerFilter: undefined,
     direction: SortDirection.ascending,
-    property: 'id'
+    property: 'id',
+    currentPage: 1
 };
 
 export type ItemViewStateMap = {
@@ -73,6 +75,12 @@ const itemViewStateSlice = createSlice({
         if (gameState) {
             gameState.ownerFilter = action.payload.value;
         } 
+    },
+    storeCurrentPage(state, action: PayloadAction<GameTypeAction<number>>) {
+        const gameState = state[action.payload.gameType]; 
+        if (gameState) {
+            gameState.currentPage = action.payload.value;
+        } 
     }
   }
 })
@@ -98,6 +106,6 @@ export const itemViewStateSelector = createSelector(
     return useSelector(itemViewStateSelector)(key);
   }
 
-export const { storeOwnerFilter, storeFilterSearch, storeSortingDirection, storeFilterSlots, storeSortingProperty, storeItemViewState } = itemViewStateSlice.actions;
+export const { storeCurrentPage, storeOwnerFilter, storeFilterSearch, storeSortingDirection, storeFilterSlots, storeSortingProperty, storeItemViewState } = itemViewStateSlice.actions;
 
 export default itemViewStateSlice.reducer;
